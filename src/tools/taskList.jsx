@@ -6,7 +6,7 @@ function taskList(){
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/tasks")  // ton backend FastAPI
+    fetch(`http://localhost:8000/tasks`)  // ton backend FastAPI
       .then(response => response.json())  // transforme la réponse http en objet JavaScript
       .then(data => setTasks(data))       // stocke le résultat dans "tasks"
       .catch(error => console.error(error))

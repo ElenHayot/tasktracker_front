@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StatusSelect from "../components/StatusSelect";
-import projectList from "../components/ProjectList";
-import userList from "../components/userList";
+import projectList from "../tools/projectList";
+import userList from "../tools/userList";
 import { cleanObject } from "../tools/cleanObjects";
 
 function CreateTask() {

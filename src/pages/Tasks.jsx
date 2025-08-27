@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import taskList from "../components/TaskList";
+import taskList from "../tools/taskList";
 import ShowTask from "../components/ShowTasks";
 
 // monte le composant App (appelé dans main.jsx)

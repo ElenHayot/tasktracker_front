@@ -1,4 +1,4 @@
-import userList from "../components/userList";
+import userList from "../tools/userList";
 import ShowUsers from "../components/ShowUsers";
 
 // monte le composant App (appelé dans main.jsx)

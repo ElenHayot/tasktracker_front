@@ -5,6 +5,9 @@ import Projects from "./pages/Projects";
 import CreateUser from "./pages/CreateUser";
 import CreateProject from "./pages/CreateProject";
 import CreateTask from "./pages/CreateTask";
+import DeleteUser from "./pages/DeleteUser";
+import DeleteTask from "./pages/DeleteTask";
+import DeleteProject from "./pages/DeleteProject";
 
 function App() {
   return (
@@ -15,7 +18,10 @@ function App() {
         <Link to="/projects">Projects</Link> |{" "}
         <Link to="/users/create">Create user</Link> |{" "}
         <Link to="/projects/create">Create project</Link> |{" "}
-        <Link to="/tasks/create">Create task</Link>
+        <Link to="/tasks/create">Create task</Link> |{" "}
+        <Link to="/users/delete">Delete user</Link> |{" "}
+        <Link to="/tasks/delete">Delete task</Link> |{" "}
+        <Link to="/projects/delete">Delete Project</Link>
       </nav>
 
       <Routes>
@@ -26,6 +32,9 @@ function App() {
         <Route path="/users/create" element={<CreateUser />} />
         <Route path="/projects/create" element={<CreateProject />} />
         <Route path="/tasks/create" element={<CreateTask />} />
+        <Route path="/users/delete" element={<DeleteUser />} />
+        <Route path="/tasks/delete" element={<DeleteTask />} />
+        <Route path="/projects/delete" element={<DeleteProject />} />
       </Routes>
     </Router>
   );

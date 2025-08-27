@@ -1,4 +1,4 @@
-import projectList from "../components/ProjectList";
+import projectList from "../tools/projectList";
 import ShowProjects from "../components/ShowProjects";
 
 // monte le composant App (appelé dans main.jsx)
