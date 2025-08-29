@@ -1,5 +1,5 @@
 // Composant affichant la liste des utilisateurs
-import ShowOneListInLine from "./ShowOneListInLine";
+import showOneListInLine from "../tools/showOneListInLine";
 
 function ShowUsers({ users }) {
   return (
@@ -13,7 +13,7 @@ function ShowUsers({ users }) {
             Email = {user.email} | 
             Phone = {user.phone} | 
             Role = {user.role} | 
-            TaskIds = {ShowOneListInLine(user.task_ids)}
+            TaskIds = {showOneListInLine(user.task_ids)}
           </span>
         </li>
       ))}

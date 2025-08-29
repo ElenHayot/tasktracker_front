@@ -1,5 +1,5 @@
 // Composant affichant la liste des projets
-import ShowOneListInLine from "./ShowOneListInLine";
+import showOneListInLine from "../tools/showOneListInLine";
 
 function ShowProjects({ projects }) {
   return (
@@ -12,7 +12,7 @@ function ShowProjects({ projects }) {
             Description = {project.description} | 
             Comment = {project.comment} | 
             Status = {project.status} | 
-            TaskIds = {ShowOneListInLine(project.task_ids)}
+            TaskIds = {showOneListInLine(project.task_ids)}
           </span>
         </li>
       ))}
