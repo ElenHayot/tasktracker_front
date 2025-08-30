@@ -2,6 +2,7 @@ import { useState } from "react";
 import taskList from "../tools/taskList";
 import parseToInt from "../tools/parseToInt";
 import { useNavigate } from "react-router-dom";
+import { SelectTaskDDL } from "../components/SelectTaskDDL";
 
 function DeleteTask(){
   const [taskId, setTaskId] = useState("");
@@ -37,18 +38,8 @@ function DeleteTask(){
     <div>
       <h1>Delete a task</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Choose a task to delete</label>
-          <select value={taskId} onChange={(e) => setTaskId(e.target.value)} required>
-            <option value="">-- Select a task ID --</option>
-            {tasks.map(task => (
-              <option key={task.id} value={task.id}>
-                ID: {task.id} - {task.title}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit">Delete</button>
+        <SelectTaskDDL tasks={tasks} value={taskId} onChange={(e) => setTaskId(e.target.value)} label="Task to delete : " required />
+        <button type="submit">DELETE</button>
       </form>
     </div>
   );

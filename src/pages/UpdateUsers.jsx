@@ -4,6 +4,7 @@ import parseToInt from "../tools/parseToInt";
 import userList from "../tools/userList";
 import { getModifiedFields } from "../tools/getModifiedFields";
 import RolesSelect from "../components/RolesSelect";
+import { SelectUserDDL } from "../components/SelectUserDDL";
 
 function UpdateUser() {
 
@@ -77,17 +78,7 @@ function UpdateUser() {
     <div>
       <h1>Update a user</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Choose a user to update</label>
-          <select value={userId} onChange={e => setUserId(e.target.value)} required>
-            <option value="">-- Select a user ID --</option>
-            {users.map(user => (
-              <option key={user.id} value={user.id}>
-                ID : {user.id} - {user.name}, {user.firstname}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SelectUserDDL users={users} value={userId} onChange={e => setUserId(e.target.value)} label="User to update : " required />
 
         {userId && (  // En JS, a && b veut dire : si a=false alors a, si a=true alors b
           <>
@@ -106,7 +97,7 @@ function UpdateUser() {
             <div>
               <label>Associated tasks: </label>
               <input type="text" value={taskIds} onChange={e => setTaskIds(e.target.value)} placeholder="Ex: 1,2,3" />
-            </div>        
+            </div>
             <button type="submit">SUBMIT</button>
           </>
         )}

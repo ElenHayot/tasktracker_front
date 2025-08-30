@@ -5,6 +5,8 @@ import parseToInt from "../tools/parseToInt";
 import { getModifiedFields } from "../tools/getModifiedFields";
 import userList from "../tools/userList";
 import StatusSelect from "../components/StatusSelect";
+import { SelectUserDDL } from "../components/SelectUserDDL";
+import { SelectTaskDDL } from "../components/SelectTaskDDL";
 
 function UpdateTask() {
 
@@ -81,17 +83,7 @@ function UpdateTask() {
     <div>
       <h1>Update a task</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Choose a task to update</label>
-          <select value={taskId} onChange={e => setTaskId(e.target.value)} required>
-            <option value="">-- Select a task ID --</option>
-            {tasks.map(task => (
-              <option key={task.id} value={task.id}>
-                ID : {task.id} - {task.title}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SelectTaskDDL tasks={tasks} value={taskId} onChange={e => setTaskId(e.target.value)} label="Task to update : " required />
 
         {taskId && (
           <>
@@ -107,17 +99,7 @@ function UpdateTask() {
               <label>Comment: </label>
               <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
             </div>
-            <div>
-              <label>Affected user: </label>
-              <select value={userId} onChange={e => setUserId(e.target.value)}>
-                <option value="">-- Select a user --</option>
-                {users.map((user) => {
-                  <option key={user.id} value={user.id}>
-                    ID : {user.id} - {user.name}, {user.firstname}
-                  </option>
-                })}
-              </select>
-            </div>
+            <SelectUserDDL users={users} value={userId} onChange={e => setUserId(e.target.value)} label="Affected user : " />
             <div>
               <label>Status: </label>
               <StatusSelect value={status} onChange={setStatus} />

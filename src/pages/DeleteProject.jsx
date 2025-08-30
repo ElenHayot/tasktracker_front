@@ -2,6 +2,7 @@ import { useState } from "react";
 import projectList from "../tools/projectList";
 import { useNavigate } from "react-router-dom";
 import parseToInt from "../tools/parseToInt";
+import { SelectProjectDDL } from "../components/SelectProjectDDL";
 
 function DeleteProject(){
   const [projectId, setProjectId] = useState("");
@@ -38,22 +39,12 @@ function DeleteProject(){
     <div>
       <h1>Delete a project</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Select a project to delete</label>
-          <select value={projectId} onChange={e => setProjectId(e.target.value)} required>
-            <option value="">-- Select a project ID --</option>
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                ID : {project.id} - {project.title}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SelectProjectDDL projects={projects} value={projectId} onChange={e => setProjectId(e.target.value)} label="Project to delete : " required />
         <div>
           <input type="checkbox" checked={forceTaskDeleting} onChange={e => setForceTaskDeleting(e.target.checked)} />
           Force tasks deleting
         </div>
-        <button type="submit">Delete</button>
+        <button type="submit">DELETE</button>
       </form>
     </div>
   );

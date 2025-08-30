@@ -50,34 +50,21 @@ function CreateProject() {
       <form onSubmit={(handleSubmit)}>
         <div>
           <label>Title: </label>
-          <input
-            type="text"
-            value={title}
-            onChange={((e) => setTitle(e.target.value))}
-            required
-          />
+          <input type="text" value={title} onChange={((e) => setTitle(e.target.value))} required />
         </div>
         <div>
           <label>Description: </label>
-          <input
-            type="text"
-            value={description}
-            onChange={((e) => setDescription(e.target.value))}
-          />
+          <input type="text" value={description} onChange={((e) => setDescription(e.target.value))} />
         </div>
         <div>
           <label>Comment: </label>
-          <input
-            type="text"
-            value={comment}
-            onChange={((e) => setComment(e.target.value))}
-          />
+          <input type="text" value={comment} onChange={((e) => setComment(e.target.value))} />
         </div>
         <div>
           <label>Status: </label>
           <StatusSelect value={status} onChange={setStatus} />
         </div>
-        <button type="submit">Create</button>
+        <button type="submit">CREATE</button>
       </form>
     </div>
   );

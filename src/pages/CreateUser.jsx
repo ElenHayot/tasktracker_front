@@ -56,38 +56,19 @@ function CreateUser() {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Name: </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div>
           <label>Firstname: </label>
-          <input
-            type="text"
-            value={firstname}
-            onChange={(e) => setFirstname(e.target.value)}
-            required
-          />
+          <input type="text" value={firstname} onChange={(e) => setFirstname(e.target.value)} required />
         </div>
         <div>
           <label>Email: </label>
-          <input
-            type="text"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
+          <input type="text" value={email} onChange={e => setEmail(e.target.value)} required />
         </div>
         <div>
           <label>Phone : </label>
-          <input
-            type="text"
-            value={phone}
-            onChange={((e) => setPhone(e.target.value))}
-          />
+          <input type="text" value={phone} onChange={((e) => setPhone(e.target.value))} />
         </div>
         <div>
           <label>Role: </label>
@@ -95,14 +76,9 @@ function CreateUser() {
         </div>
         <div>
           <label>Task ids list : </label>
-          <input
-            type="text"
-            value={taskIds}
-            onChange={(e) => setTaskIds(e.target.value.split(","))}
-            placeholder="Ex: 1,2,3"
-          />
+          <input type="text" value={taskIds} onChange={(e) => setTaskIds(e.target.value.split(","))} placeholder="Ex: 1,2,3" />
         </div>
-        <button type="submit">Create</button>
+        <button type="submit">CREATE</button>
       </form>
     </div>
   );

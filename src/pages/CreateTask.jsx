@@ -4,6 +4,8 @@ import StatusSelect from "../components/StatusSelect";
 import projectList from "../tools/projectList";
 import userList from "../tools/userList";
 import { cleanObject } from "../tools/cleanObjects";
+import { SelectProjectDDL } from "../components/SelectProjectDDL";
+import { SelectUserDDL } from "../components/SelectUserDDL";
 
 function CreateTask() {
   const [title, setTitle] = useState("");
@@ -59,52 +61,23 @@ function CreateTask() {
       <form onSubmit={(handleSubmit)}>
         <div>
           <label>Title: </label>
-          <input 
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
         </div>
         <div>
           <label>Description: </label>
-          <input 
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
         <div>
           <label>Comment: </label>
           <input type="text" value={comment} onChange={(e) => setComment(e.target.value)} />
         </div>
-        <div>
-          <label>Project ID: </label>
-          <select value={projectId} onChange={(e) => setProjectId(e.target.value)} required >
-            <option value="">-- Select a project --</option>
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.id}: {project.title}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label>User ID: </label>
-          <select value={userId} onChange={(e) => setUserId(e.target.value)} >
-            <option value="">-- Select a user --</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                 {user.id}: {user.name}, {user.firstname}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SelectProjectDDL projects={projects} value={projectId} onChange={(e) => setProjectId(e.target.value)} required />
+        <SelectUserDDL users={users} value={userId} onChange={(e) => setUserId(e.target.value)} />
         <div>
           <label>Status: </label>
           <StatusSelect value={status} onChange={setStatus} />
         </div>
-        <button type="submit">Create</button>
+        <button type="submit">CREATE</button>
       </form>
     </div>
   );

@@ -15,7 +15,7 @@ function StatusSelect({value, onChange}){
     // J'affiche un select et j'envoie la valeur sélectionnée (onChange)
     return (
         <select value={value} onChange={e => onChange(e.target.value)}>
-            <option value="">-- Chose a status --</option>
+            <option value="">-- Choose a status --</option>
             {status.map((s) => (
                 <option key={s} value={s}>
                     {s}

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import parseToInt from "../tools/parseToInt";
 import { getModifiedFields } from "../tools/getModifiedFields";
 import StatusSelect from "../components/StatusSelect";
+import { SelectProjectDDL } from "../components/SelectProjectDDL";
 
 function UpdateProject() {
 
@@ -76,17 +77,7 @@ function UpdateProject() {
     <div>
       <h1>Update a project</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Choose a project to update</label>
-          <select value={projectId} onChange={e => setProjectId(e.target.value)} required>
-            <option value="">-- Select a project ID --</option>
-            {projects.map(project => (
-              <option key={project.id} value={project.id}>
-                ID : {project.id} - {project.title}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SelectProjectDDL projects={projects} value={projectId} onChange={e => setProjectId(e.target.value)} label="Project to update : " required />
 
         {projectId && (
           <>

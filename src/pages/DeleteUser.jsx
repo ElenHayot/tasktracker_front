@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userList from "../tools/userList";
 import parseToInt from "../tools/parseToInt";
+import { SelectUserDDL } from "../components/SelectUserDDL";
 
 function DeleteUser() {
   const [userId, setUserId] = useState("");
@@ -38,18 +39,8 @@ function DeleteUser() {
     <div>
       <h1>Delete a user</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Choose a user to delete</label>
-          <select value={userId} onChange={e => setUserId(e.target.value)} required >
-            <option value="">-- Select a user --</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                ID : {user.id} - {user.name}, {user.firstname}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit">Delete</button>
+        <SelectUserDDL users={users} value={userId} onChange={e => setUserId(e.target.value)} label="User to delete : " required />
+        <button type="submit">DELETE</button>
       </form>
     </div>
   );
