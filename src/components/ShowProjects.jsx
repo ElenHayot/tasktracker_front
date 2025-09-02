@@ -1,5 +1,7 @@
 // Composant affichant la liste des projets
+import { getTaskById } from "../tools/getTaskById";
 import showOneListInLine from "../tools/showOneListInLine";
+import { TaskSelector } from "./TaskSelector";
 
 function ShowProjects({ projects }) {
   return (
@@ -8,12 +10,22 @@ function ShowProjects({ projects }) {
         <li key={project.id}>
           <p>ID : {project.id} {'>>'}</p>
           <span>
-            Title = {project.title} | 
-            Description = {project.description} | 
-            Comment = {project.comment} | 
-            Status = {project.status} | 
-            TaskIds = {showOneListInLine(project.task_ids)}
+            Title = {project.title} |
+            Description = {project.description} |
+            Comment = {project.comment} |
+            Status = {project.status} |
           </span>
+          <div className="task-section">
+            <label className="task-label">Associated tasks</label>
+            <div className="task-container selected-tasks">
+              {project.task_ids.length == 0 ? (<p>No associated task</p>) : (
+                project.task_ids.map(taskId => {
+                  const task = getTaskById(taskId);
+                  return (<div className="task-item">ID : {taskId} - {task ? task.title : `Unknown task`}</div>)
+                })
+              )}
+            </div>
+          </div>
         </li>
       ))}
     </ul>

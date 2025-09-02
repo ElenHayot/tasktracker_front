@@ -1,0 +1,148 @@
+/* TaskSelector.css */
+
+/* flexbox avec 20 pixels entre chaque élément, éléments alignés à gauche */
+.task-selector {
+  display: flex;
+  gap: 20px;  /* espacement entre chaque item */
+  align-items: flex-start;  /* alignement vertical en haut */
+}
+
+/* enfant de la flexbox */
+.task-zone {
+  flex: 1;  /* prend tout l'espace disponible */
+}
+
+.task-section {
+  margin-bottom: 20px;
+}
+
+.task-label {
+  display: block; /* oblige les autres éléments alignés à changer de ligne (réserve la ligne courante pour cet élément) */
+  font-weight: bold;  /* texte en gras */
+  margin-bottom: 8px; /* marge extérieure en bas */
+  color: #333;
+}
+
+.task-container {
+  border: 1px solid #ccc; /* largeur-style-couleur de la bordure */
+  border-radius: 8px; /* coins arrondis */
+  padding: 10px; /* marge intérieur tous côtés */
+  min-height: 50px;
+  max-width: 300px;
+  transition: all 0.2s ease;  /* durée de transition (ici "slow start") */
+}
+
+.selected-tasks {
+  background-color: #f9f9f9;
+  border-color: #28a745;
+}
+
+.available-tasks {
+  background-color: #f0f8ff;
+  max-height: 150px;  /* hauteur max de la DDL */
+  overflow-y: auto;   /* déroulement de la DDL auto */
+}
+
+/* hover : action lorsque la souris passe sur l'élément */
+.available-tasks:hover {
+  border-color: #007bff;
+}
+
+.empty-message {
+  color: #888;
+  font-style: italic;
+  margin: 0;
+  text-align: center;
+  padding: 20px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;  /* alignement vertical */
+  justify-content: space-between; /* alignement horizontal */
+  padding: 8px 10px; /* Espace intérieur haut/bas: 8px et gauche/droite: 12px */
+  margin: 2px 2px;  /* Espace extérieur h/b: 4px et g/d: 0 */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  transition: all 0.2 ease;
+  max-height: 12px;
+}
+
+.task-item:hover {
+  transform: translateY(-1px);  /* Déplace verticalement lorsque l'on passe la souris dessus */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* <task-item class="available"> */
+.task-item.available {
+  cursor: pointer;
+}
+
+.task-item.available:hover {
+  background-color: #e6f3ff;
+  border-color: #007bff;
+}
+
+/* :active == onlick */
+.task-item.available:active {
+  transform: translateY(0);
+}
+
+.task-text {
+  font-size: 14px;
+  color: #333;
+}
+
+.task-assigned-user {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+.remove-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;  /* mise en gras */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: #c82333;
+  transform: scale(1.1);  /* agrandit */
+}
+
+.remove-btn:active {
+  transform: scale(0.95);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.task-item {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Responsive */
+
+/* cette règle s'applique uniquement si écran <= 768 pixels (tablette, téléphone) */
+@media (max-width: 768px) {
+  .task-selector {
+    flex-direction: column; /* par défaut, affichage en ligne, on passe en colonne */
+  }
+
+  .task-container {
+    max-height: 150px;  /* limite la taille de la DDL, couplé par définition au [overflow-y: auto] */
+  }
+}

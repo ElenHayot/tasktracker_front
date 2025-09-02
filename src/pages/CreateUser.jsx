@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RolesSelect from "../components/RolesSelect";
 import { cleanObject } from "../tools/cleanObjects";
+import { TaskSelector } from "../components/TaskSelector";
 
 function CreateUser() {
   const [name, setName] = useState("");
@@ -76,7 +77,7 @@ function CreateUser() {
         </div>
         <div>
           <label>Task ids list : </label>
-          <input type="text" value={taskIds} onChange={(e) => setTaskIds(e.target.value.split(","))} placeholder="Ex: 1,2,3" />
+          <TaskSelector selectedTaskIds={taskIds} onTaskIdsChange={setTaskIds} label="Associated tasks : " />
         </div>
         <button type="submit">CREATE</button>
       </form>

@@ -5,6 +5,7 @@ import userList from "../tools/userList";
 import { getModifiedFields } from "../tools/getModifiedFields";
 import RolesSelect from "../components/RolesSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
+import { TaskSelector } from "../components/TaskSelector";
 
 function UpdateUser() {
 
@@ -94,10 +95,7 @@ function UpdateUser() {
               <label>Role: </label>
               <RolesSelect value={role} onChange={setRole} />
             </div>
-            <div>
-              <label>Associated tasks: </label>
-              <input type="text" value={taskIds} onChange={e => setTaskIds(e.target.value)} placeholder="Ex: 1,2,3" />
-            </div>
+            <TaskSelector selectedTaskIds={taskIds} onTaskIdsChange={setTaskIds} label="Associated tasks : " />
             <button type="submit">SUBMIT</button>
           </>
         )}
