@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function StatusSelect({value, onChange}){
+export function StatusSelect({value, onChange}){
     const [status, setStatus] = useState([]);
 
     // Je définis "status" en récupérant les valeurs du fetch et je les stocke dans mon state
@@ -24,5 +24,3 @@ function StatusSelect({value, onChange}){
         </select>
     );
 }
-
-export default StatusSelect;

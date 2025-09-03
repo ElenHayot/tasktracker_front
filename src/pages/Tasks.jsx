@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import taskList from "../tools/taskList";
-import ShowTask from "../components/ShowTasks";
+import { useTaskList } from "../hooks/useTaskList";
+import { ShowTask } from "../components/ShowTasks";
 
 // monte le composant App (appelé dans main.jsx)
 function Tasks() {
-  const { tasks, loading }  = taskList();
+  const { tasks, loading } = useTaskList();
 
   if (loading) return <p>Loading...</p>
   return (

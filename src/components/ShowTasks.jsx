@@ -1,6 +1,6 @@
 // Composant affichant la liste des tâches
 
-function ShowTask({ tasks }) {
+export function ShowTask({ tasks }) {
   return (
     <ul>
       {tasks.map((task) => (
@@ -9,14 +9,13 @@ function ShowTask({ tasks }) {
           <span>
             Title = {task.title} | 
             Description = {task.description}| 
-            ProjectId = {task.project_id} | 
-            UserId = {task.user_id} | 
-            Status = {task.status}
+            Assigned project ID = {task.project_id} | 
+            Assigned user ID = {task.user_id} | 
+            Comment = {task.comment} | 
+            Status = {task.status} | 
           </span>
         </li>
       ))}
     </ul>
   );
 }
-
-export default ShowTask;

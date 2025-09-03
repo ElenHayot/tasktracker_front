@@ -1,7 +1,7 @@
 // Composant récupérant la liste des tâches présentes en base
 import { useEffect, useState } from "react";
 
-function taskList(){
+export function useTaskList(){
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,5 +16,3 @@ function taskList(){
   return { tasks, loading };
 
 }
-
-export default taskList;

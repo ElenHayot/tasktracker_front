@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RolesSelect from "../components/RolesSelect";
-import { cleanObject } from "../tools/cleanObjects";
+import { RolesSelect } from "../components/RolesSelect";
+import { cleanObject } from "../utils/cleanObjects";
 import { TaskSelector } from "../components/TaskSelector";
 
 function CreateUser() {

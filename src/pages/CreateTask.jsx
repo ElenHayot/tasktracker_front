@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import StatusSelect from "../components/StatusSelect";
-import projectList from "../tools/projectList";
-import userList from "../tools/userList";
-import { cleanObject } from "../tools/cleanObjects";
+import { StatusSelect } from "../components/StatusSelect";
+import { useProjectList } from "../hooks/useProjectList";
+import { useUserList } from "../hooks/useUserList";
+import { cleanObject } from "../utils/cleanObjects";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 
@@ -14,8 +14,8 @@ function CreateTask() {
   const [projectId, setProjectId] = useState("");
   const [userId, setUserId] = useState("");
   const [status, setStatus] = useState("");
-  const {projects, loading_projects} = projectList();
-  const {users, loading_users} = userList();
+  const { projects, loading_projects } = useProjectList();
+  const { users, loading_users } = useUserList();
   const navigate = useNavigate(); // pour naviguer à la page "Tasks" après création
 
   // objet json de type TaskCreate (api) avec les éléments strictement nécessaire pour renvoyer la requête
@@ -23,9 +23,9 @@ function CreateTask() {
     title,
     description,
     comment,
-    project_id : parseInt(projectId, 10),  // "10" indique qu'on lit en base décimale
-    user_id : userId ? parseInt(userId, 10) : "", // si vide, supprimé ensuite par cleanObject(object)
-    status : status ? status : "" // si vide, supprimé ensuite par cleanObject(object)
+    project_id: parseInt(projectId, 10),  // "10" indique qu'on lit en base décimale
+    user_id: userId ? parseInt(userId, 10) : "", // si vide, supprimé ensuite par cleanObject(object)
+    status: status ? status : "" // si vide, supprimé ensuite par cleanObject(object)
   };
 
   const payload = cleanObject(taskData);  // supprime les clés vides

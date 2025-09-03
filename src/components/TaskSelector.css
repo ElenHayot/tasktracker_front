@@ -35,6 +35,8 @@
 .selected-tasks {
   background-color: #f9f9f9;
   border-color: #28a745;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .available-tasks {

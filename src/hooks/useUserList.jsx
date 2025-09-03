@@ -1,7 +1,7 @@
 // Composant récupérant la liste des users en base
 import { useState, useEffect } from "react";
 
-function userList(){
+export function useUserList(){
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,5 +15,3 @@ function userList(){
 
   return { users, loading };
 }
-
-export default userList;

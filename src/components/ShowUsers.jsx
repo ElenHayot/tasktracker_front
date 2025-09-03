@@ -1,9 +1,8 @@
 // Composant affichant la liste des utilisateurs
-import { getTaskById } from "../tools/getTaskById";
-import showOneListInLine from "../tools/showOneListInLine";
+import { useTaskById } from "../hooks/useTaskById";
 import { TaskSelector } from "./TaskSelector";
 
-function ShowUsers({ users }) {
+export function ShowUsers({ users }) {
   return (
     <ul>
       {users.map((user) => (
@@ -21,7 +20,7 @@ function ShowUsers({ users }) {
             <div className="task-container selected-tasks">
               {user.task_ids.length == 0 ? (<p> No associated task </p>) : (
                 user.task_ids.map(taskId => {
-                  const task = getTaskById(taskId);
+                  const { task } = useTaskById(taskId);   // Destructuring obligatoire lorsque l'on appelle un hook
                   return (<div className="task-item">ID : {taskId} - {task ? task.title : `Unknown task`}</div>)
                 })
               )}
@@ -32,5 +31,3 @@ function ShowUsers({ users }) {
     </ul>
   );
 }
-
-export default ShowUsers;

@@ -1,9 +1,9 @@
-import projectList from "../tools/projectList";
-import ShowProjects from "../components/ShowProjects";
+import { useProjectList } from "../hooks/useProjectList";
+import { ShowProjects } from "../components/ShowProjects";
 
 // monte le composant App (appelé dans main.jsx)
 function Projects() {
-   const { projects, loading } = projectList();
+  const { projects, loading } = useProjectList();
 
   if (loading) return <p>Loading...</p>;
   return (

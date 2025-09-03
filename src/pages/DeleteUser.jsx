@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import userList from "../tools/userList";
-import parseToInt from "../tools/parseToInt";
+import { useUserList } from "../hooks/useUserList";
+import { parseToInt } from "../utils/parseToInt";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 
 function DeleteUser() {
   const [userId, setUserId] = useState("");
-  const {users, loadingUsers} = userList();
+  const { users, loadingUsers } = useUserList();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -16,10 +16,10 @@ function DeleteUser() {
     fetch(`http://localhost:8000/users/${userIdInt}`,
       {
         method: "DELETE",
-        headers: { "Content-Type": "application/json"}  // pas besoin de body lors du delete, paramètre dans l'URL
+        headers: { "Content-Type": "application/json" }  // pas besoin de body lors du delete, paramètre dans l'URL
       })
       .then(async res => {
-        if (!res.ok) { 
+        if (!res.ok) {
           const errorData = await res.json();
           throw new Error(errorData.Detail || "API error");
         }

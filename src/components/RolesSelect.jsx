@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function RolesSelect({value, onChange}) {
+export function RolesSelect({value, onChange}) {
     const[roles, setRoles] = useState([]);
 
     // Je définis "roles" en récupérant les valeurs du fetch et je les stocke dans mon state
@@ -22,5 +22,3 @@ function RolesSelect({value, onChange}) {
         </select>
     );
 }
-
-export default RolesSelect;

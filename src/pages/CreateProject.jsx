@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import StatusSelect from "../components/StatusSelect";
-import { cleanObject } from "../tools/cleanObjects";
+import { StatusSelect } from "../components/StatusSelect";
+import { cleanObject } from "../utils/cleanObjects";
 
 function CreateProject() {
   const [title, setTitle] = useState("");

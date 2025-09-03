@@ -1,24 +1,24 @@
 import { useState } from "react";
-import projectList from "../tools/projectList";
+import { useProjectList } from "../hooks/useProjectList";
 import { useNavigate } from "react-router-dom";
-import parseToInt from "../tools/parseToInt";
+import { parseToInt } from "../utils/parseToInt";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
 
-function DeleteProject(){
+function DeleteProject() {
   const [projectId, setProjectId] = useState("");
   const [forceTaskDeleting, setForceTaskDeleting] = useState(false);
-  const {projects, loadingProjects} = projectList();
+  const { projects, loadingProjects } = useProjectList();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const projectIdInt = parseToInt(projectId);
 
-    fetch(`http://localhost:8000/projects/${projectIdInt}/${forceTaskDeleting}`,{
+    fetch(`http://localhost:8000/projects/${projectIdInt}/${forceTaskDeleting}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" }
     })
-      .then( async (res) => {
+      .then(async (res) => {
         if (!res.ok) {
           errorData = await res.json();
           throw new Error(errorData.Detail || `API error.`);

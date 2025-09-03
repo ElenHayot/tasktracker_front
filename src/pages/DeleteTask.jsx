@@ -1,12 +1,12 @@
 import { useState } from "react";
-import taskList from "../tools/taskList";
-import parseToInt from "../tools/parseToInt";
+import { useTaskList } from "../hooks/useTaskList";
+import { parseToInt } from "../utils/parseToInt";
 import { useNavigate } from "react-router-dom";
 import { SelectTaskDDL } from "../components/SelectTaskDDL";
 
-function DeleteTask(){
+function DeleteTask() {
   const [taskId, setTaskId] = useState("");
-  const {tasks, loadingTasks} = taskList();
+  const { tasks, loadingTasks } = useTaskList();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -15,10 +15,10 @@ function DeleteTask(){
 
     fetch(`http://localhost:8000/tasks/${taskIdInt}`, {
       method: "DELETE",
-      headers: {"Content-Type": "application/json"}
+      headers: { "Content-Type": "application/json" }
     })
       .then(async (res) => {
-        if (!res.ok) { 
+        if (!res.ok) {
           const errorData = await res.json();
           throw new Error(errorData.Detail || `API error.`);
         }

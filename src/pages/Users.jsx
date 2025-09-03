@@ -1,9 +1,9 @@
-import userList from "../tools/userList";
-import ShowUsers from "../components/ShowUsers";
+import { useUserList } from "../hooks/useUserList";
+import { ShowUsers } from "../components/ShowUsers";
 
 // monte le composant App (appelé dans main.jsx)
 function Users() {
-  const { users, loading} = userList();
+  const { users, loading } = useUserList();
 
   if (loading) return <p>Loading...</p>;
   return (

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import taskList from "../tools/taskList";
-import parseToInt from "../tools/parseToInt";
-import { getModifiedFields } from "../tools/getModifiedFields";
-import userList from "../tools/userList";
-import StatusSelect from "../components/StatusSelect";
+import { useTaskList } from "../hooks/useTaskList";
+import { parseToInt } from "../utils/parseToInt";
+import { getModifiedFields } from "../utils/getModifiedFields";
+import { useUserList } from "../hooks/useUserList";
+import { StatusSelect } from "../components/StatusSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { SelectTaskDDL } from "../components/SelectTaskDDL";
 
@@ -18,8 +18,8 @@ function UpdateTask() {
   const [userId, setUserId] = useState("");
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
-  const { tasks, loadingTasks } = taskList();
-  const { users, loadingUsers } = userList();
+  const { tasks, loadingTasks } = useTaskList();
+  const { users, loadingUsers } = useUserList();
 
   // On charge les données de la tâche sélectionnée
   useEffect(() => {
@@ -110,7 +110,7 @@ function UpdateTask() {
       </form>
     </div>
   );
-  
+
 }
 
 export default UpdateTask;

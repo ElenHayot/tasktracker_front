@@ -1,7 +1,7 @@
 // Composant récupérant la liste des projets en base
 import { useEffect, useState } from "react";
 
-function projectList(){
+export function useProjectList(){
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,5 +15,3 @@ function projectList(){
 
   return { projects, loading };
 }
-
-export default projectList;

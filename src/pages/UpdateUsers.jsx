@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import parseToInt from "../tools/parseToInt";
-import userList from "../tools/userList";
-import { getModifiedFields } from "../tools/getModifiedFields";
-import RolesSelect from "../components/RolesSelect";
+import { parseToInt } from "../utils/parseToInt";
+import { useUserList } from "../hooks/useUserList";
+import { getModifiedFields } from "../utils/getModifiedFields";
+import { RolesSelect } from "../components/RolesSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { TaskSelector } from "../components/TaskSelector";
 
@@ -15,7 +15,7 @@ function UpdateUser() {
   const [role, setRole] = useState("");
   const [taskIds, setTaskIds] = useState([]);
   const navigate = useNavigate();
-  const { users, loadingUsers } = userList();
+  const { users, loadingUsers } = useUserList();
   const [initialUser, setInitialUser] = useState(null);
 
   // On charge les donées de l’utilisateur sélectionné

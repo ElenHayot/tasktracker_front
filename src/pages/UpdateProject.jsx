@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import projectList from "../tools/projectList";
+import { useProjectList } from "../hooks/useProjectList";
 import { useNavigate } from "react-router-dom";
-import parseToInt from "../tools/parseToInt";
-import { getModifiedFields } from "../tools/getModifiedFields";
-import StatusSelect from "../components/StatusSelect";
+import { parseToInt } from "../utils/parseToInt";
+import { getModifiedFields } from "../utils/getModifiedFields";
+import { StatusSelect } from "../components/StatusSelect";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
 
 function UpdateProject() {
@@ -14,7 +14,7 @@ function UpdateProject() {
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
-  const { projects, loadingProjects } = projectList();
+  const { projects, loadingProjects } = useProjectList();
   const navigate = useNavigate();
 
   // on charge les données du projet sélectionné
