@@ -12,6 +12,7 @@ import UpdateUser from "./pages/UpdateUsers";
 import UpdateTask from "./pages/UpdateTask";
 import UpdateProject from "./pages/UpdateProject";
 import TaskDetail from "./pages/TaskDetail";
+import UserDetail from "./pages/UserDetail";
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
         <Link to="/users/update">Update user</Link> |{" "}
         <Link to="/tasks/update">Update task</Link> |{" "}
         <Link to="/projects/update">Update project</Link> |{" "}
-        <Link to="/tasks/details/:taskId" >Task details</Link>
+        <Link to="/tasks/details/:taskId">Task details</Link> |{" "}
+        <Link to="/users/details/:userId">User details</Link> |{" "}
       </nav>
 
       <Routes>
@@ -47,6 +49,7 @@ function App() {
         <Route path="/tasks/update" element={<UpdateTask />} />
         <Route path="/projects/update" element={<UpdateProject />} />
         <Route path="/tasks/details/:taskId" element={<TaskDetail />} />
+        <Route path="/users/details/:userId" element={<UserDetail />} />
       </Routes>
     </Router>
   );

@@ -1,5 +1,6 @@
 // Composant affichant la liste des projets
 import { useTaskById } from "../hooks/useTaskById";
+import { TaskItem } from "./TaskItem";
 import { TaskSelector } from "./TaskSelector";
 
 export function ShowProjects({ projects }) {
@@ -18,10 +19,9 @@ export function ShowProjects({ projects }) {
             <label className="task-label">Associated tasks</label>
             <div className="task-container selected-tasks">
               {project.task_ids.length == 0 ? (<p>No associated task</p>) : (
-                project.task_ids.map(taskId => {
-                  const task = useTaskById(taskId);
-                  return (<div className="task-item">ID : {taskId} - {task ? task.title : `Unknown task`}</div>)
-                })
+                project.task_ids.map(taskId => (
+                  <TaskItem key={taskId} taskId={taskId} />
+                ))
               )}
             </div>
           </div>
