@@ -1,15 +1,22 @@
 // Page affichant le détail d'une tâche
 
-import { useEffect, useState } from "react";
 import { useTaskById } from "../hooks/useTaskById";
+import { useParams } from "react-router-dom";
+import { parseToInt } from "../utils/parseToInt";
 
-export function TaskDetail(taskId) {
+function TaskDetail() {
 
-  useEffect(() => {
-    if (!taskId) return;
-    const task = taskId ? useTaskById(taskId) : null;
+  // Récupère les paramètres de l'URL courante
+  const { taskId } = useParams();
+  const {task, loading} = taskId ? useTaskById(taskId) : {task: null, loading: false};
 
-  }, [taskId]);
+  if (loading) {
+    return <div>Chargement de la tâche ...</div>;
+  }
+
+  if (!task) {
+    return <div>Tâche non trouvée</div>;
+  }
 
   return (
     <div>
@@ -26,3 +33,5 @@ export function TaskDetail(taskId) {
     </div>
   );
 }
+
+export default TaskDetail;

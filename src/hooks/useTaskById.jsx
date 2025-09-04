@@ -4,16 +4,17 @@ import { parseToInt } from "../utils/parseToInt";
 export function useTaskById(taskId) {
   const [ task, setTask ] = useState(null);
   const [ loading, setLoading ] = useState(true);
-  const taskIdInt = parseToInt(taskId);
 
   useEffect(() => {
+    const taskIdInt = parseToInt(taskId);
+
     fetch(`http://localhost:8000/tasks/${taskIdInt}`)
     .then(response => response.json())
     .then(data => setTask(data))
     .catch(err => console.log(err.message))
     .finally(setLoading(false));
-  }, [taskIdInt]);
+  }, [taskId]);
 
-  return { task };
+  return { task, loading };
 
 }
