@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StatusSelect } from "../components/StatusSelect";
 import { cleanObject } from "../utils/cleanObjects";
+import API_CONFIG from "../config/api";
 
 function CreateProject() {
   const [title, setTitle] = useState("");
@@ -22,26 +23,35 @@ function CreateProject() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:8000/projects/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.Detail || "API error");
-        }
-        return res.json();
+    try {
+      const url = API_CONFIG.baseUrl + `/projects`;
+      
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       })
-      .then((data) => {
-        console.log("Project created : ", data);
-        navigate("/projects");
-      })
-      .catch((error) => {
-        console.error("Error : ", error.message);
-        alert("Error : " + error.message);
-      });
+        .then(async (res) => {
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.Detail || "API error");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log("Project created : ", data);
+          navigate("/projects");
+        })
+        .catch((error) => {
+          console.error("Error : ", error.message);
+          alert("Error : " + error.message);
+        });
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+    
   };
 
   return (

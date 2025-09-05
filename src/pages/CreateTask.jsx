@@ -6,6 +6,7 @@ import { useUserList } from "../hooks/useUserList";
 import { cleanObject } from "../utils/cleanObjects";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
 import { SelectUserDDL } from "../components/SelectUserDDL";
+import API_CONFIG from "../config/api";
 
 function CreateTask() {
   const [title, setTitle] = useState("");
@@ -33,26 +34,37 @@ function CreateTask() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:8000/tasks/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.Detail || "API error");
-        }
-        return res.json();
+    try{
+      
+      const url = API_CONFIG.baseUrl + `/tasks`;
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       })
-      .then((data) => {
-        console.log("Task created : ", data);
-        navigate("/tasks");
-      })
-      .catch((error) => {
-        console.error("Error : ", error.message);
-        alert("Error : " + error.message);
-      });
+        .then(async (res) => {
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.Detail || "API error");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log("Task created : ", data);
+          navigate("/tasks");
+        })
+        .catch((error) => {
+          console.error("Error : ", error.message);
+          alert("Error : " + error.message);
+        });
+
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+
   };
 
   return (

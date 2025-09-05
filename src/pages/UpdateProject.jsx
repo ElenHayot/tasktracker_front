@@ -5,6 +5,7 @@ import { parseToInt } from "../utils/parseToInt";
 import { getModifiedFields } from "../utils/getModifiedFields";
 import { StatusSelect } from "../components/StatusSelect";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
+import API_CONFIG from "../config/api";
 
 function UpdateProject() {
 
@@ -21,21 +22,32 @@ function UpdateProject() {
   useEffect(() => {
     if (!projectId) return;
 
-    const projectIdInt = parseInt(projectId);
+    try {
 
-    fetch(`http://localhost:8000/projects/${projectIdInt}`)
-      .then(response => response.json())  // transforme la réponse http en objet JavaScript
-      .then(data => {
-        setInitialProject(data);
-        setTitle(data.title);
-        setDescription(data.description);
-        setComment(data.comment);
-        setStatus(data.status);
-      })
-      .catch(err => {
-        console.error(err.message);
-        alert(`Can't load project data for project ID "${projectId}".`);
-      });
+      const projectIdInt = parseInt(projectId);
+      const urlInitialProject = API_CONFIG.baseUrl + `/projects/${projectIdInt}`;
+
+      fetch(urlInitialProject)
+        .then(response => response.json())  // transforme la réponse http en objet JavaScript
+        .then(data => {
+          setInitialProject(data);
+          setTitle(data.title);
+          setDescription(data.description);
+          setComment(data.comment);
+          setStatus(data.status);
+        })
+        .catch(err => {
+          console.error(err.message);
+          alert(`Can't load project data for project ID "${projectId}".`);
+        });
+
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+
+
   }, [projectId]);
 
   const updates = {
@@ -48,29 +60,37 @@ function UpdateProject() {
   const handleSubmit = e => {
     e.preventDefault();
 
-    const projectIdInt = parseToInt(projectId);
-    const payloadUpdates = initialProject ? getModifiedFields(initialProject, updates) : {};
+    try {
+      const projectIdInt = parseToInt(projectId);
+      const payloadUpdates = initialProject ? getModifiedFields(initialProject, updates) : {};
+      const url = API_CONFIG.baseUrl + `/projects/${projectIdInt}`;
 
-    fetch(`http://localhost:8000/projects/${projectIdInt}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payloadUpdates)
-    })
-      .then(async res => {
-        if (!res.ok) {
-          errorData = await res.json();
-          throw new Error(errorData.Detail || `API error`);
-        }
-        return res.json();
+      fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payloadUpdates)
       })
-      .then(data => {
-        console.log(`Project with ID ${projectId} updated`);
-        navigate(`/projects`);
-      })
-      .catch(err => {
-        console.log(err.message);
-        alert(err.message);
-      });
+        .then(async res => {
+          if (!res.ok) {
+            errorData = await res.json();
+            throw new Error(errorData.Detail || `API error`);
+          }
+          return res.json();
+        })
+        .then(data => {
+          console.log(`Project with ID ${projectId} updated`);
+          navigate(`/projects`);
+        })
+        .catch(err => {
+          console.log(err.message);
+          alert(err.message);
+        });
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+
   };
 
   return (

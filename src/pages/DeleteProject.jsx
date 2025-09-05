@@ -3,6 +3,7 @@ import { useProjectList } from "../hooks/useProjectList";
 import { useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
+import API_CONFIG from "../config/api";
 
 function DeleteProject() {
   const [projectId, setProjectId] = useState("");
@@ -12,27 +13,37 @@ function DeleteProject() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const projectIdInt = parseToInt(projectId);
 
-    fetch(`http://localhost:8000/projects/${projectIdInt}/${forceTaskDeleting}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" }
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          errorData = await res.json();
-          throw new Error(errorData.Detail || `API error.`);
-        }
-        return res.json();
+    try {
+      const projectIdInt = parseToInt(projectId);
+      const url = API_CONFIG.baseUrl + `/projects/${projectIdInt}/${forceTaskDeleting}`;
+
+      fetch(url, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
       })
-      .then(() => {
-        console.log(`Project with ID "${projectId}" deleted`);
-        navigate(`/projects`);
-      })
-      .catch(err => {
-        console.log(err.message);
-        alert(err.message);
-      });
+        .then(async (res) => {
+          if (!res.ok) {
+            errorData = await res.json();
+            throw new Error(errorData.Detail || `API error.`);
+          }
+          return res.json();
+        })
+        .then(() => {
+          console.log(`Project with ID "${projectId}" deleted`);
+          navigate(`/projects`);
+        })
+        .catch(err => {
+          console.log(err.message);
+          alert(err.message);
+        });
+
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+
   }
 
   return (

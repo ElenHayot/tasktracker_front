@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirectDocument, useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
 import { useUserList } from "../hooks/useUserList";
 import { getModifiedFields } from "../utils/getModifiedFields";
 import { RolesSelect } from "../components/RolesSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { TaskSelector } from "../components/TaskSelector";
+import API_CONFIG from "../config/api";
 
 function UpdateUser() {
 
@@ -22,22 +23,32 @@ function UpdateUser() {
   useEffect(() => {
     if (!userId) return;
 
-    const userIdInt = parseToInt(userId);
+    try {
 
-    fetch(`http://localhost:8000/users/${userIdInt}`)
-      .then(response => response.json())  // transforme la réponse http en objet JavaScript
-      .then(data => {
-        setInitialUser(data);  // on garde une copie pour comparer
-        // Pré-remplir les champs
-        setEmail(data.email);
-        setPhone(data.phone);
-        setRole(data.role);
-        setTaskIds(data.task_ids);
-      })
-      .catch(err => {
-        console.error(err.message);
-        alert(`Can't load user data for user ID "${userId}".`);
-      });
+      const userIdInt = parseToInt(userId);
+      const urlInitialUser = API_CONFIG.baseUrl + `/users/${userIdInt}`;
+
+      fetch(urlInitialUser)
+        .then(response => response.json())  // transforme la réponse http en objet JavaScript
+        .then(data => {
+          setInitialUser(data);  // on garde une copie pour comparer
+          // Pré-remplir les champs
+          setEmail(data.email);
+          setPhone(data.phone);
+          setRole(data.role);
+          setTaskIds(data.task_ids);
+        })
+        .catch(err => {
+          console.error(err.message);
+          alert(`Can't load user data for user ID "${userId}".`);
+        });
+
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+
   }, [userId]); // on recharge à chaque changement de userId
 
   const updates = {
@@ -50,29 +61,39 @@ function UpdateUser() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userIdInt = parseToInt(userId);
-    const payloadUpdates = initialUser ? getModifiedFields(initialUser, updates) : {};
+    try {
 
-    fetch(`http://localhost:8000/users/${userIdInt}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payloadUpdates)
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.Detail || `API error`);
-        }
-        return res.json();
+      const userIdInt = parseToInt(userId);
+      const payloadUpdates = initialUser ? getModifiedFields(initialUser, updates) : {};
+      const url = API_CONFIG.baseUrl + `/users/${userIdInt}`;
+
+      fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payloadUpdates)
       })
-      .then((data) => {
-        console.log(`User with ID "${userId}" updated`);
-        navigate(`/users`);
-      })
-      .catch(err => {
-        console.log(err.message);
-        alert(err.message);
-      });
+        .then(async (res) => {
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.Detail || `API error`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log(`User with ID "${userId}" updated`);
+          navigate(`/users`);
+        })
+        .catch(err => {
+          console.log(err.message);
+          alert(err.message);
+        });
+
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+
   }
 
   return (

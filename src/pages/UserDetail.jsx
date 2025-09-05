@@ -1,7 +1,5 @@
 import { useParams } from "react-router-dom";
 import { useUserById } from "../hooks/useUserById";
-import { TaskSelector } from "../components/TaskSelector";
-import { useTaskById } from "../hooks/useTaskById";
 import { TaskItem } from "../components/TaskItem";
 
 function UserDetail() {

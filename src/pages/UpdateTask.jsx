@@ -7,6 +7,7 @@ import { useUserList } from "../hooks/useUserList";
 import { StatusSelect } from "../components/StatusSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { SelectTaskDDL } from "../components/SelectTaskDDL";
+import API_CONFIG from "../config/api";
 
 function UpdateTask() {
 
@@ -25,22 +26,31 @@ function UpdateTask() {
   useEffect(() => {
     if (!taskId) return;
 
-    const taskIdInt = parseInt(taskId);
+    try {
+      const taskIdInt = parseInt(taskId);
+      const urlInitialTask = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
 
-    fetch(`http://localhost:8000/tasks/${taskIdInt}`)
-      .then(response => response.json())  // transforme la réponse http en objet JavaScript
-      .then(data => {
-        setInitialTask(data);
-        setTitle(data.title);
-        setDescription(data.description);
-        setComment(data.comment);
-        setUserId(data.user_id);
-        setStatus(data.status);
-      })
-      .catch(err => {
-        console.error(err.message);
-        alert(`Can't load user data for task ID "${taskId}".`);
-      });
+      fetch(urlInitialTask)
+        .then(response => response.json())  // transforme la réponse http en objet JavaScript
+        .then(data => {
+          setInitialTask(data);
+          setTitle(data.title);
+          setDescription(data.description);
+          setComment(data.comment);
+          setUserId(data.user_id);
+          setStatus(data.status);
+        })
+        .catch(err => {
+          console.error(err.message);
+          alert(`Can't load user data for task ID "${taskId}".`);
+        });
+
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+
   }, [taskId]);
 
   const updates = {
@@ -54,29 +64,38 @@ function UpdateTask() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const taskIdInt = parseToInt(taskId);
-    const payloadUpdates = initialTask ? getModifiedFields(initialTask, updates) : {};
+    try {
+      const taskIdInt = parseToInt(taskId);
+      const payloadUpdates = initialTask ? getModifiedFields(initialTask, updates) : {};
+      const url = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
 
-    fetch(`http://localhost:8000/tasks/${taskIdInt}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payloadUpdates)
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.Detail || `API error`);
-        }
-        return res.json();
+      fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payloadUpdates)
       })
-      .then((data) => {
-        console.log(`Task with ID ${taskId} updated.`);
-        navigate(`/tasks`);
-      })
-      .catch(err => {
-        console.log(err.message);
-        alert(err.message);
-      });
+        .then(async (res) => {
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.Detail || `API error`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log(`Task with ID ${taskId} updated.`);
+          navigate(`/tasks`);
+        })
+        .catch(err => {
+          console.log(err.message);
+          alert(err.message);
+        });
+
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+      return;
+    }
+
   };
 
   return (

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { parseToInt } from "../utils/parseToInt";
+import API_CONFIG from "../config/api";
 
 export function useUserById(userId) {
 
@@ -16,15 +17,16 @@ export function useUserById(userId) {
 
     try {
       const userIdInt = parseToInt(userId); // peut planter, d'où le try/catch
+      const url = API_CONFIG.baseUrl + `/users/${userIdInt}`;
 
-      fetch(`http://localhost:8000/users/${userIdInt}`)
+      fetch(url)
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(err => console.log(err.message))
       .finally(() => setLoading(false));
 
     } catch (error) {
-      console.error("Error parsing userId:", error.message);
+      console.error(error.message);
       setUser(null);
       setLoading(false);   
     }

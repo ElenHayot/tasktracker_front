@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { parseToInt } from "../utils/parseToInt";
+import API_CONFIG from "../config/api";
 
 export function useTaskById(taskId) {
 
@@ -16,15 +17,16 @@ export function useTaskById(taskId) {
 
     try{
       const taskIdInt = parseToInt(taskId);
+      const url = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
 
-      fetch(`http://localhost:8000/tasks/${taskIdInt}`)
+      fetch(url)
       .then(response => response.json())
       .then(data => setTask(data))
       .catch(err => console.log(err.message))
       .finally(() => setLoading(false));
 
     } catch (error) {
-      console.error("Error parsing taskId : ", error.message);
+      console.error(error.message);
       setTask(null);
       setLoading(false);
     }
