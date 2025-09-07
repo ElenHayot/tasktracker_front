@@ -1,11 +1,10 @@
+// Page permettant de mettre à jour un projet
 import { useEffect, useState } from "react";
 import { useProjectList } from "../hooks/useProjectList";
-import { useNavigate } from "react-router-dom";
-import { parseToInt } from "../utils/parseToInt";
-import { getModifiedFields } from "../utils/getModifiedFields";
 import { StatusSelect } from "../components/StatusSelect";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
 import API_CONFIG from "../config/api";
+import { useUpdateProject } from "../hooks/useUpdateProject";
 
 function UpdateProject() {
 
@@ -15,39 +14,39 @@ function UpdateProject() {
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
-  const { projects, loadingProjects } = useProjectList();
-  const navigate = useNavigate();
+  const { projects, } = useProjectList();
 
   // on charge les données du projet sélectionné
   useEffect(() => {
     if (!projectId) return;
 
-    try {
+    const loadProject = async () => {
+      try {
+        const projectIdInt = parseInt(projectId);
+        const urlInitialProject = API_CONFIG.baseUrl + `/projects/${projectIdInt}`;
 
-      const projectIdInt = parseInt(projectId);
-      const urlInitialProject = API_CONFIG.baseUrl + `/projects/${projectIdInt}`;
+        const response = await fetch(urlInitialProject);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} : ${response.statusText}`);
+        }
 
-      fetch(urlInitialProject)
-        .then(response => response.json())  // transforme la réponse http en objet JavaScript
-        .then(data => {
-          setInitialProject(data);
-          setTitle(data.title);
-          setDescription(data.description);
-          setComment(data.comment);
-          setStatus(data.status);
-        })
-        .catch(err => {
-          console.error(err.message);
-          alert(`Can't load project data for project ID "${projectId}".`);
-        });
+        const data = await response.json();
 
-    } catch (err) {
-      console.error(err.message);
-      alert(err.message);
-      return;
-    }
+        setInitialProject(data);
+        setTitle(data.title);
+        setDescription(data.description);
+        setComment(data.comment);
+        setStatus(data.status);
 
+      } catch (err) {
+        console.error(err.message);
+        alert(`Can't load project data for project ID "${projectId}".`);
+        return;
+      }
 
+    };
+
+    loadProject();
   }, [projectId]);
 
   const updates = {
@@ -57,40 +56,16 @@ function UpdateProject() {
     status: status
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const updateProject = useUpdateProject();
 
-    try {
-      const projectIdInt = parseToInt(projectId);
-      const payloadUpdates = initialProject ? getModifiedFields(initialProject, updates) : {};
-      const url = API_CONFIG.baseUrl + `/projects/${projectIdInt}`;
-
-      fetch(url, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payloadUpdates)
-      })
-        .then(async res => {
-          if (!res.ok) {
-            errorData = await res.json();
-            throw new Error(errorData.Detail || `API error`);
-          }
-          return res.json();
-        })
-        .then(data => {
-          console.log(`Project with ID ${projectId} updated`);
-          navigate(`/projects`);
-        })
-        .catch(err => {
-          console.log(err.message);
-          alert(err.message);
-        });
-    } catch (err) {
-      console.error(err.message);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try{
+      await updateProject(projectId, initialProject, updates);
+    } catch (error) {
+      console.log(error.medssage);
       alert(err.message);
-      return;
     }
-
   };
 
   return (

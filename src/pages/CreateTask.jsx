@@ -1,3 +1,4 @@
+// Page permettant de créer une tâche
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StatusSelect } from "../components/StatusSelect";
@@ -7,6 +8,7 @@ import { cleanObject } from "../utils/cleanObjects";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import API_CONFIG from "../config/api";
+import { useCreateTask } from "../hooks/useCreateTask";
 
 function CreateTask() {
   const [title, setTitle] = useState("");
@@ -15,8 +17,8 @@ function CreateTask() {
   const [projectId, setProjectId] = useState("");
   const [userId, setUserId] = useState("");
   const [status, setStatus] = useState("");
-  const { projects, loading_projects } = useProjectList();
-  const { users, loading_users } = useUserList();
+  const { projects, } = useProjectList();
+  const { users, } = useUserList();
   const navigate = useNavigate(); // pour naviguer à la page "Tasks" après création
 
   // objet json de type TaskCreate (api) avec les éléments strictement nécessaire pour renvoyer la requête
@@ -29,40 +31,16 @@ function CreateTask() {
     status: status ? status : "" // si vide, supprimé ensuite par cleanObject(object)
   };
 
-  const payload = cleanObject(taskData);  // supprime les clés vides
+  const createTask = useCreateTask();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    try{
-      
-      const url = API_CONFIG.baseUrl + `/tasks`;
-
-      fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            const errorData = await res.json();
-            throw new Error(errorData.Detail || "API error");
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log("Task created : ", data);
-          navigate("/tasks");
-        })
-        .catch((error) => {
-          console.error("Error : ", error.message);
-          alert("Error : " + error.message);
-        });
-
-    } catch (err) {
-      console.error(err.message);
-      alert(err.message);
-      return;
+    try {
+      await createTask(taskData);
+    } catch (error) {
+      console.log(error.message);
+      alert(error.message);
     }
 
   };

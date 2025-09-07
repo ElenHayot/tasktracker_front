@@ -2,26 +2,32 @@
 import { useEffect, useState } from "react";
 import API_CONFIG from "../config/api";
 
-export function useProjectList(){
+export function useProjectList() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
-    try {
-      const url = API_CONFIG.baseUrl + `/projects`;
+    const loadProjects = async () => {
+      try {
+        const url = API_CONFIG.baseUrl + `/projects`;
+        
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} : ${response.statusText}`);
+        }
 
-      fetch(url)  // ton backend FastAPI
-        .then(response => response.json())  // transforme la réponse http en objet JavaScript
-        .then(data => setProjects(data))       // stocke le résultat dans "projects"
-        .catch(error => console.error(error))
-        .finally(() => setLoading(false));
+        const data = await response.json();
+        setProjects(data);
 
-    } catch (err) {
-      console.error(err.message);
-      setProjects([]);
-      setLoading(false);
-    }
+      } catch (err) {
+        console.error(err.message);
+      } finally { 
+        setLoading(false);
+      }
+    };
+
+    loadProjects();
 
   }, []);   // [] veut dire: exécuter ce code qu'une seule fois au montage du composant
 

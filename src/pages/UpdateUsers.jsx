@@ -7,6 +7,7 @@ import { RolesSelect } from "../components/RolesSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { TaskSelector } from "../components/TaskSelector";
 import API_CONFIG from "../config/api";
+import { useUpdateUser } from "../hooks/useUpdateUser";
 
 function UpdateUser() {
 
@@ -58,40 +59,16 @@ function UpdateUser() {
     task_ids: taskIds
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const updateUser = useUpdateUser();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     try {
-
-      const userIdInt = parseToInt(userId);
-      const payloadUpdates = initialUser ? getModifiedFields(initialUser, updates) : {};
-      const url = API_CONFIG.baseUrl + `/users/${userIdInt}`;
-
-      fetch(url, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payloadUpdates)
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            const errorData = await res.json();
-            throw new Error(errorData.Detail || `API error`);
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log(`User with ID "${userId}" updated`);
-          navigate(`/users`);
-        })
-        .catch(err => {
-          console.log(err.message);
-          alert(err.message);
-        });
-
+      await updateUser(userId, initialUser, updates);
     } catch (err) {
-      console.error(err.message);
+      console.log(err.message);
       alert(err.message);
-      return;
     }
 
   }

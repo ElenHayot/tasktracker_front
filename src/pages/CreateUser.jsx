@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { RolesSelect } from "../components/RolesSelect";
-import { cleanObject } from "../utils/cleanObjects";
 import { TaskSelector } from "../components/TaskSelector";
-import API_CONFIG from "../config/api";
+import { useCreateUser } from "../hooks/useCreateUser";
 
 function CreateUser() {
   const [name, setName] = useState("");
@@ -12,7 +10,6 @@ function CreateUser() {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
   const [taskIds, setTaskIds] = useState("");
-  const navigate = useNavigate();
 
   const userData = {
     name: name,
@@ -23,42 +20,17 @@ function CreateUser() {
     task_ids: taskIds ? taskIds.map(Number) : ""
   };
 
-  const payload = cleanObject(userData);
+  const createUser = useCreateUser();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+
+    event.preventDefault();
 
     try {
-      
-      const url = API_CONFIG.baseUrl + `/users`;
-
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload)
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            const errorData = await res.json();   // récupère le JSON d'erreur
-            throw new Error(errorData.Detail || "API error");
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log("User created : ", data);
-          navigate("/users"); // 👈 redirige vers la liste des users
-        })
-        .catch((err) => {
-          console.error("Error : ", err.message);
-          alert("Error : " + err.message); // afficher sur l'UI si on veut
-        });
-
+      await createUser(userData);
     } catch (err) {
-      console.error(err.message);
+      console.log(err.message);
       alert(err.message);
-      return;
     }
 
   };

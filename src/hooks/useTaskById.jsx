@@ -15,21 +15,27 @@ export function useTaskById(taskId) {
       return;
     }
 
-    try{
-      const taskIdInt = parseToInt(taskId);
-      const url = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
+    const loadTask = async () => {
+      try {
+        const taskIdInt = parseToInt(taskId);
+        const url = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
 
-      fetch(url)
-      .then(response => response.json())
-      .then(data => setTask(data))
-      .catch(err => console.log(err.message))
-      .finally(() => setLoading(false));
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} : ${response.statusText}`);
+        }
 
-    } catch (error) {
-      console.error(error.message);
-      setTask(null);
-      setLoading(false);
-    }
+        const data = await response.json();
+        setTask(data);
+
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTask();
     
   }, [taskId]);
 

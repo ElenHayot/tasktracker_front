@@ -8,19 +8,26 @@ export function useUserList(){
 
   useEffect(() => {
 
-    try {
-      const url = API_CONFIG.baseUrl + `/users`;
-      fetch(url)  // ton backend FastAPI
-        .then(response => response.json())  // transforme la réponse http en objet JavaScript
-        .then(data => setUsers(data))       // stocke le résultat dans "users"
-        .catch(error => console.error(error))
-        .finally(() => setLoading(false));  // une fois fini, on dit que le loading est terminé : info pour celui qui appelle la fonction
+    const loadUsers = async () => {
+      try {
+        const url = API_CONFIG.baseUrl + `/users`;
 
-    } catch (err) {
-      console.error(err.message);
-      setUsers([]);
-      setLoading(false);
-    }
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} : ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setUsers(data);
+
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUsers();
     
   }, []);   // [] veut dire: exécuter ce code qu'une seule fois au montage du composant
 

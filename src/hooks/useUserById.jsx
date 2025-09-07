@@ -15,21 +15,27 @@ export function useUserById(userId) {
       return;
     }
 
-    try {
-      const userIdInt = parseToInt(userId); // peut planter, d'où le try/catch
-      const url = API_CONFIG.baseUrl + `/users/${userIdInt}`;
+    const loadUser = async () => {
+      try {
+        const userIdInt = parseToInt(userId); // peut planter, d'où le try/catch
+        const url = API_CONFIG.baseUrl + `/users/${userIdInt}`;
 
-      fetch(url)
-      .then(response => response.json())
-      .then(data => setUser(data))
-      .catch(err => console.log(err.message))
-      .finally(() => setLoading(false));
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} : ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        setUser(data);
 
-    } catch (error) {
-      console.error(error.message);
-      setUser(null);
-      setLoading(false);   
-    }
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
 
   }, [userId]);
 

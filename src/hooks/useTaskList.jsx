@@ -8,19 +8,27 @@ export function useTaskList(){
 
   useEffect(() => {
 
-    try {
-      const url = API_CONFIG.baseUrl + `/tasks`;
+    const loadTasks = async () => {
+      try {
+        const url = API_CONFIG.baseUrl + `/tasks`;
+        
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} : ${response.statusText}`);
+        }
 
-      fetch(url)  // ton backend FastAPI
-        .then(response => response.json())  // transforme la réponse http en objet JavaScript
-        .then(data => setTasks(data))       // stocke le résultat dans "tasks"
-        .catch(error => console.error(error))
-        .finally(() => setLoading(false));
-    } catch(err) {
-      console.error(err.message);
-      setTasks([]);
-      setLoading(false);
-    }
+        const data = await response.json();
+        setTasks(data);
+
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTasks();
+
   }, []);
 
   return { tasks, loading };

@@ -1,13 +1,12 @@
+// Page permettant de mettre à jour une tâche
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useTaskList } from "../hooks/useTaskList";
-import { parseToInt } from "../utils/parseToInt";
-import { getModifiedFields } from "../utils/getModifiedFields";
 import { useUserList } from "../hooks/useUserList";
 import { StatusSelect } from "../components/StatusSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { SelectTaskDDL } from "../components/SelectTaskDDL";
 import API_CONFIG from "../config/api";
+import { useUpdateTask } from "../hooks/useUpdateTask";
 
 function UpdateTask() {
 
@@ -18,9 +17,8 @@ function UpdateTask() {
   const [comment, setComment] = useState("");
   const [userId, setUserId] = useState("");
   const [status, setStatus] = useState("");
-  const navigate = useNavigate();
-  const { tasks, loadingTasks } = useTaskList();
-  const { users, loadingUsers } = useUserList();
+  const { tasks, } = useTaskList();
+  const { users, } = useUserList();
 
   // On charge les données de la tâche sélectionnée
   useEffect(() => {
@@ -51,51 +49,31 @@ function UpdateTask() {
       return;
     }
 
-  }, [taskId]);
+  }, [taskId]); 
 
   const updates = {
-    title: title,
-    description: description,
-    comment: comment,
-    user_id: userId,
-    status: status
+    title,  // Equivalent à title: title
+    description,
+    comment,
+    user_id: userId,  // noms différents back/front
+    status
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const updateTask = useUpdateTask();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // empêche le rechargement de page
+
+    // Nécessite une propriété name="title" etc... sur les div et moins de contrôle qu'avec un objet 
+    //const formData = new FormData(event.target);
+    //const updates = Object.fromEntries(formData);
 
     try {
-      const taskIdInt = parseToInt(taskId);
-      const payloadUpdates = initialTask ? getModifiedFields(initialTask, updates) : {};
-      const url = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
-
-      fetch(url, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payloadUpdates)
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            const errorData = await res.json();
-            throw new Error(errorData.Detail || `API error`);
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log(`Task with ID ${taskId} updated.`);
-          navigate(`/tasks`);
-        })
-        .catch(err => {
-          console.log(err.message);
-          alert(err.message);
-        });
-
-    } catch (err) {
-      console.error(err.message);
+      await updateTask(taskId, initialTask, updates);
+    } catch (error) {
+      console.error(error.message);
       alert(err.message);
-      return;
     }
-
   };
 
   return (
@@ -108,7 +86,7 @@ function UpdateTask() {
           <>
             <div>
               <label>Title: </label>
-              <input type="text" value={title} onChange={e => setTitle(e => e.target.value)} />
+              <input type="text" value={title} onChange={e => setTitle(e.target.value)} />
             </div>
             <div>
               <label>Description: </label>

@@ -1,50 +1,26 @@
 import { useState } from "react";
 import { useProjectList } from "../hooks/useProjectList";
-import { useNavigate } from "react-router-dom";
-import { parseToInt } from "../utils/parseToInt";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
-import API_CONFIG from "../config/api";
+import { useDeleteProject } from "../hooks/useDeleteProject";
 
 function DeleteProject() {
   const [projectId, setProjectId] = useState("");
   const [forceTaskDeleting, setForceTaskDeleting] = useState(false);
-  const { projects, loadingProjects } = useProjectList();
-  const navigate = useNavigate();
+  const { projects, } = useProjectList();
+  const deleteProject = useDeleteProject();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     try {
-      const projectIdInt = parseToInt(projectId);
-      const url = API_CONFIG.baseUrl + `/projects/${projectIdInt}/${forceTaskDeleting}`;
-
-      fetch(url, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" }
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            errorData = await res.json();
-            throw new Error(errorData.Detail || `API error.`);
-          }
-          return res.json();
-        })
-        .then(() => {
-          console.log(`Project with ID "${projectId}" deleted`);
-          navigate(`/projects`);
-        })
-        .catch(err => {
-          console.log(err.message);
-          alert(err.message);
-        });
+      await deleteProject(projectId, forceTaskDeleting);
 
     } catch (err) {
       console.error(err.message);
       alert(err.message);
-      return;
     }
 
-  }
+  };
 
   return (
     <div>
