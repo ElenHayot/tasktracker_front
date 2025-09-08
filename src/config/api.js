@@ -14,7 +14,7 @@ const API_CONFIG = {
 
 // Fonction pour construire les URLs
 export function buildApiUrl(endpoint, id = null, queryParams = {}) {
-    let url = `${API_CONFIG.baseUrl}${API_CONFIG.version || ""}${API_CONFIG.endpoints[endpoint]}`;
+    let url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints[endpoint]}`;
 
     if (id) {
         url += `/${id}`;
@@ -23,6 +23,11 @@ export function buildApiUrl(endpoint, id = null, queryParams = {}) {
     const params = new URLSearchParams(queryParams);
     if (params.toString()) {
         url += `?${params.toString()}`;
+    }
+
+    // Si on demande un endpoint racine (ex: `/users/`)
+    if (!id && !params.toString()) {
+        url += `/`;
     }
 
     return url;
@@ -46,11 +51,11 @@ export const API_URLS = {
     getProjectById: (id) => buildApiUrl("projects", id),
     createProject: () => buildApiUrl("projects"),
     updateProject: (id) => buildApiUrl("projects", id),
-    deleteProject: (id) => buildApiUrl("projects", id),
+    deleteProject: (id, forceTaskDeleting = false) => buildApiUrl("projects", id, { force_task_deleting: forceTaskDeleting }),
 
     // GET /projects/123/tasks
-    getProjectTasks: (projectId) => buildApiUrl("projects", `${projectId}/tasks`),
-    getUserTasks: (userId) => buildApiUrl("users", `${userId}/tasks`),
+    getProjectTasks: (projectId) => buildApiUrl("projects", `${projectId}/tasks/`),
+    getUserTasks: (userId) => buildApiUrl("users", `${userId}/tasks/`),
 
 };
 

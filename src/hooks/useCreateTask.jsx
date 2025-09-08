@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { cleanObject } from "../utils/cleanObjects";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useCreateTask() {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ export function useCreateTask() {
   const createTask = useCallback(async (taskData) => {
     try {
       const payload = cleanObject(taskData);  // supprime les clés vides
-      const url = API_CONFIG.baseUrl + `/tasks`;
+      const url = API_URLS.createTask();
 
       const response = await fetch(url, {
         method: "POST",

@@ -4,10 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { StatusSelect } from "../components/StatusSelect";
 import { useProjectList } from "../hooks/useProjectList";
 import { useUserList } from "../hooks/useUserList";
-import { cleanObject } from "../utils/cleanObjects";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
 import { SelectUserDDL } from "../components/SelectUserDDL";
-import API_CONFIG from "../config/api";
 import { useCreateTask } from "../hooks/useCreateTask";
 
 function CreateTask() {

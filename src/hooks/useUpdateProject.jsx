@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { getModifiedFields } from "../utils/getModifiedFields";
 import { parseToInt } from "../utils/parseToInt";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 import { useCallback } from "react";
 
 export function useUpdateProject() {
@@ -15,7 +15,7 @@ export function useUpdateProject() {
     try {
       const projectIdInt = parseToInt(projectId);
       const payloadUpdates = initialProject ? getModifiedFields(initialProject, updates) : {};
-      const url = API_CONFIG.baseUrl + `/projects/${projectIdInt}`;
+      const url = API_URLS.updateProject(projectIdInt);
 
       const response = await fetch(url, {
         method: "PUT",

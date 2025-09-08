@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { parseToInt } from "../utils/parseToInt";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useTaskById(taskId) {
 
@@ -18,7 +18,7 @@ export function useTaskById(taskId) {
     const loadTask = async () => {
       try {
         const taskIdInt = parseToInt(taskId);
-        const url = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
+        const url = API_URLS.getTaskById(taskIdInt);
 
         const response = await fetch(url);
         if (!response.ok) {

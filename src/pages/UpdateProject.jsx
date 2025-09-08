@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useProjectList } from "../hooks/useProjectList";
 import { StatusSelect } from "../components/StatusSelect";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 import { useUpdateProject } from "../hooks/useUpdateProject";
 
 function UpdateProject() {
@@ -23,7 +23,7 @@ function UpdateProject() {
     const loadProject = async () => {
       try {
         const projectIdInt = parseInt(projectId);
-        const urlInitialProject = API_CONFIG.baseUrl + `/projects/${projectIdInt}`;
+        const urlInitialProject = API_URLS.getProjectById(projectIdInt);
 
         const response = await fetch(urlInitialProject);
         if (!response.ok) {

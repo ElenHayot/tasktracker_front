@@ -18,9 +18,9 @@ function App() {
   return (
     <Router>
       <nav>
-        <Link to="/users">Users</Link> |{" "}
-        <Link to="/tasks">Tasks</Link> |{" "}
-        <Link to="/projects">Projects</Link> |{" "}
+        <Link to="/users/">Users</Link> |{" "}
+        <Link to="/tasks/">Tasks</Link> |{" "}
+        <Link to="/projects/">Projects</Link> |{" "}
         <Link to="/users/create">Create user</Link> |{" "}
         <Link to="/projects/create">Create project</Link> |{" "}
         <Link to="/tasks/create">Create task</Link> |{" "}
@@ -36,9 +36,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<h1>Bienvenue 👋</h1>} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/projects" element={<Projects />} />
+        <Route path="/users/" element={<Users />} />
+        <Route path="/tasks/" element={<Tasks />} />
+        <Route path="/projects/" element={<Projects />} />
         <Route path="/users/create" element={<CreateUser />} />
         <Route path="/projects/create" element={<CreateProject />} />
         <Route path="/tasks/create" element={<CreateTask />} />

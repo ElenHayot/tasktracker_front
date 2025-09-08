@@ -1,6 +1,6 @@
 // Composant récupérant la liste des users en base
 import { useState, useEffect } from "react";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useUserList(){
   const [users, setUsers] = useState([]);
@@ -10,7 +10,7 @@ export function useUserList(){
 
     const loadUsers = async () => {
       try {
-        const url = API_CONFIG.baseUrl + `/users`;
+        const url = API_URLS.getUsers();
 
         const response = await fetch(url);
         if (!response.ok) {

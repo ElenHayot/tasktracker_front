@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { cleanObject } from "../utils/cleanObjects";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useCreateProject() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export function useCreateProject() {
 
     try {
       const payload = cleanObject(projectData);
-      const url = API_CONFIG.baseUrl + `/projects`;
+      const url = API_URLS.createProject();
 
       const response = await fetch(url, {
         method: "POST",

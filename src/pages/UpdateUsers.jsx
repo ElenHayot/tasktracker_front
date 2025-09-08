@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { redirectDocument, useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
 import { useUserList } from "../hooks/useUserList";
-import { getModifiedFields } from "../utils/getModifiedFields";
 import { RolesSelect } from "../components/RolesSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { TaskSelector } from "../components/TaskSelector";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 import { useUpdateUser } from "../hooks/useUpdateUser";
 
 function UpdateUser() {
@@ -16,8 +14,7 @@ function UpdateUser() {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
   const [taskIds, setTaskIds] = useState([]);
-  const navigate = useNavigate();
-  const { users, loadingUsers } = useUserList();
+  const { users, } = useUserList();
   const [initialUser, setInitialUser] = useState(null);
 
   // On charge les donées de l’utilisateur sélectionné
@@ -27,7 +24,7 @@ function UpdateUser() {
     try {
 
       const userIdInt = parseToInt(userId);
-      const urlInitialUser = API_CONFIG.baseUrl + `/users/${userIdInt}`;
+      const urlInitialUser = API_URLS.getUserById(userIdInt);
 
       fetch(urlInitialUser)
         .then(response => response.json())  // transforme la réponse http en objet JavaScript

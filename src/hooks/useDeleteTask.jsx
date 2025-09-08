@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useDeleteTask() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export function useDeleteTask() {
     try {
 
       const taskIdInt = parseToInt(taskId);
-      const url = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
+      const url = API_URLS.deleteTask(taskIdInt);
 
       const response = await fetch(url, {
         method: "DELETE",

@@ -1,6 +1,6 @@
 // Composant récupérant la liste des tâches présentes en base
 import { useEffect, useState } from "react";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useTaskList(){
   const [tasks, setTasks] = useState([]);
@@ -10,7 +10,7 @@ export function useTaskList(){
 
     const loadTasks = async () => {
       try {
-        const url = API_CONFIG.baseUrl + `/tasks`;
+        const url = API_URLS.getTasks();
         
         const response = await fetch(url);
         if (!response.ok) {

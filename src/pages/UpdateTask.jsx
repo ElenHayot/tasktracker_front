@@ -5,7 +5,7 @@ import { useUserList } from "../hooks/useUserList";
 import { StatusSelect } from "../components/StatusSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { SelectTaskDDL } from "../components/SelectTaskDDL";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 
 function UpdateTask() {
@@ -26,7 +26,7 @@ function UpdateTask() {
 
     try {
       const taskIdInt = parseInt(taskId);
-      const urlInitialTask = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
+      const urlInitialTask = API_URLS.getTaskById(taskIdInt);
 
       fetch(urlInitialTask)
         .then(response => response.json())  // transforme la réponse http en objet JavaScript

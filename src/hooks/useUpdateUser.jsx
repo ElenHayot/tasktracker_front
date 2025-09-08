@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getModifiedFields } from "../utils/getModifiedFields";
 import { parseToInt } from "../utils/parseToInt";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useUpdateUser() {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ export function useUpdateUser() {
 
       const userIdInt = parseToInt(userId);
       const payloadUpdates = initialUser ? getModifiedFields(initialUser, updates) : {};
-      const url = API_CONFIG.baseUrl + `/users/${userIdInt}`;
+      const url = API_URLS.updateUser(userIdInt);
 
       const response = await fetch(url, {
         method: "PUT",

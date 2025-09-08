@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useDeleteUser() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export function useDeleteUser() {
 
     try {
       const userIdInt = parseToInt(userId);
-      const url = API_CONFIG.baseUrl + `/users/${userIdInt}`;
+      const url = API_URLS.deleteUser(userIdInt);
 
       const response = await fetch(url,{
         method: "DELETE",

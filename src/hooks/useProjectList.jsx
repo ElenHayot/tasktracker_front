@@ -1,6 +1,6 @@
 // Composant récupérant la liste des projets en base
 import { useEffect, useState } from "react";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useProjectList() {
   const [projects, setProjects] = useState([]);
@@ -10,7 +10,7 @@ export function useProjectList() {
 
     const loadProjects = async () => {
       try {
-        const url = API_CONFIG.baseUrl + `/projects`;
+        const url = API_URLS.getProjects();
         
         const response = await fetch(url);
         if (!response.ok) {

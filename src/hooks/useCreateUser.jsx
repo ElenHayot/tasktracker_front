@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { cleanObject } from "../utils/cleanObjects";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useCreateUser() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export function useCreateUser() {
 
     try {
       const payload = cleanObject(userData);
-      const url = API_CONFIG.baseUrl + `/users`;
+      const url = API_URLS.createUser();
 
       const response = await fetch(url, {
         method: "POST",

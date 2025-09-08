@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useDeleteProject() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export function useDeleteProject() {
     try {
 
       const projectIdInt = parseToInt(projectId);
-      const url = API_CONFIG.baseUrl + `/projects/${projectIdInt}/${forceTaskDeleting}`;
+      const url = API_URLS.deleteProject(projectIdInt, forceTaskDeleting);
 
       const response = await fetch(url, {
         method: "DELETE",

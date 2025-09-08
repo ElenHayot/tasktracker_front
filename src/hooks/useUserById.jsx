@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { parseToInt } from "../utils/parseToInt";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useUserById(userId) {
 
@@ -18,7 +18,7 @@ export function useUserById(userId) {
     const loadUser = async () => {
       try {
         const userIdInt = parseToInt(userId); // peut planter, d'où le try/catch
-        const url = API_CONFIG.baseUrl + `/users/${userIdInt}`;
+        const url = API_URLS.getUserById(userIdInt);
 
         const response = await fetch(url);
         if (!response.ok) {

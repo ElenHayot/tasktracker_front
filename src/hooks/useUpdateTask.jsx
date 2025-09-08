@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
 import { getModifiedFields } from "../utils/getModifiedFields";
-import API_CONFIG from "../config/api";
+import { API_URLS } from "../config/api";
 
 export function useUpdateTask() {
 
@@ -14,7 +14,7 @@ export function useUpdateTask() {
     try {
       const taskIdInt = parseToInt(taskId);
       const payloadUpdates = initialTask ? getModifiedFields(initialTask, updates) : {};
-      const url = API_CONFIG.baseUrl + `/tasks/${taskIdInt}`;
+      const url = API_URLS.updateTask(taskIdInt);
 
       const response = await fetch(url, {
         method: "PUT",
