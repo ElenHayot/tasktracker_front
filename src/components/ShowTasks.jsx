@@ -1,13 +1,18 @@
 // Composant affichant la liste des tâches
 
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export function ShowTask({ tasks }) {
   const navigate = useNavigate();
-  const goToTaskDetail = (taskId) => {
-    navigate(`/tasks/details/${taskId}`);
-  }
+  const handleEditTaskWithData = (task) => {
+    navigate(`/tasks/update-task`, {
+      state: { taskData: task }
+    });
+  };
+  const handleEditTaskWithId = (taskId) => {
+    navigate(`/tasks/update-task/${taskId}`);
+  };
+
 
   return (
     <ul>
@@ -21,9 +26,12 @@ export function ShowTask({ tasks }) {
             Assigned user ID = {task.user_id} | 
             Comment = {task.comment} | */}
             Status = {task.status} 
-            <button onClick={() => goToTaskDetail(task.id)} style={{ marginLeft: "10px" }}>View details</button>
-            <Link to={`/tasks/details/${task.id}`}>Details</Link>
           </span>
+          <div>
+            <Link to={`/tasks/details/${task.id}`}>Details</Link>
+            <button onClick={() => handleEditTaskWithData(task)}>Edit (with data)</button>
+            <button onClick={() => handleEditTaskWithId(task.id)}>Edit (ID only)</button>
+          </div>
         </li>
       ))}
     </ul>

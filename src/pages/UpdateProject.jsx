@@ -5,6 +5,7 @@ import { StatusSelect } from "../components/StatusSelect";
 import { SelectProjectDDL } from "../components/SelectProjectDDL";
 import { API_URLS } from "../config/api";
 import { useUpdateProject } from "../hooks/useUpdateProject";
+import { useLocation, useParams } from "react-router-dom";
 
 function UpdateProject() {
 
@@ -16,9 +17,39 @@ function UpdateProject() {
   const [status, setStatus] = useState("");
   const { projects, } = useProjectList();
 
+  const { projectId: urlProjectId } = useParams();
+  const location = useLocation();
+  const passedProjectData = location.state?.projectData;
+
+  // Effet pour initialiser selon la source de données
+  useEffect(() => {
+    // Si cas 1 : on a récupéré toutes les données du projet
+    if (passedProjectData) {
+      console.log("Cas projectData reçu");
+
+      setInitialProject(passedProjectData);
+      setProjectId(passedProjectData.id);
+      setTitle(passedProjectData.title);
+      setDescription(passedProjectData.description);
+      setComment(passedProjectData.comment);
+      setStatus(passedProjectData.status);
+      return;
+    }
+
+    // Cas 2 : on a récupéré l'ID projet dans le lien URL
+    if (urlProjectId) {
+      console.log("Cas ID reçu dans l'URL");
+      setProjectId(urlProjectId);
+      return;
+    }
+
+    // Cas 3 : on a rien, accès à la page update direct
+    console.log("Cas d'accès direct, aucun paramètre");
+  }, [urlProjectId, passedProjectData]);
+
   // on charge les données du projet sélectionné
   useEffect(() => {
-    if (!projectId) return;
+    if (!projectId || passedProjectData) return;  // Si données déjà récupérées on passe notre chemin !
 
     const loadProject = async () => {
       try {
@@ -47,7 +78,7 @@ function UpdateProject() {
     };
 
     loadProject();
-  }, [projectId]);
+  }, [projectId, passedProjectData]);
 
   const updates = {
     title: title,
@@ -68,13 +99,20 @@ function UpdateProject() {
     }
   };
 
+  const showProjectSelector = !urlProjectId && ! passedProjectData;
+  const showProjectForm = projectId && initialProject;
+
   return (
     <div>
       <h1>Update a project</h1>
       <form onSubmit={handleSubmit}>
-        <SelectProjectDDL projects={projects} value={projectId} onChange={e => setProjectId(e.target.value)} label="Project to update : " required />
+        {showProjectSelector && (<SelectProjectDDL projects={projects} value={projectId} onChange={e => setProjectId(e.target.value)} label="Project to update : " required />)}
 
-        {projectId && (
+        {/* Affichage du nom du projet si on n'a pas la DDL ! */}
+        {!showProjectSelector && initialProject && (
+          <div style={{marginBottom:'1rem', fontWeight:'bold'}}>Editing {initialProject.title} ({initialProject.id})</div>
+        )}
+        {showProjectForm && (
           <>
             <div>
               <label>Title: </label>

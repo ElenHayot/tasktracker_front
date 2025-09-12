@@ -17,14 +17,13 @@ function CreateTask() {
   const [status, setStatus] = useState("");
   const { projects, } = useProjectList();
   const { users, } = useUserList();
-  const navigate = useNavigate(); // pour naviguer à la page "Tasks" après création
 
   // objet json de type TaskCreate (api) avec les éléments strictement nécessaire pour renvoyer la requête
   const taskData = {
     title,
     description,
     comment,
-    project_id: parseInt(projectId, 10),  // "10" indique qu'on lit en base décimale
+    project_id: projectId ? parseInt(projectId, 10) : "",  // "10" indique qu'on lit en base décimale
     user_id: userId ? parseInt(userId, 10) : "", // si vide, supprimé ensuite par cleanObject(object)
     status: status ? status : "" // si vide, supprimé ensuite par cleanObject(object)
   };

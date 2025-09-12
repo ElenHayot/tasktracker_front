@@ -7,6 +7,7 @@ import { SelectUserDDL } from "../components/SelectUserDDL";
 import { SelectTaskDDL } from "../components/SelectTaskDDL";
 import { API_URLS } from "../config/api";
 import { useUpdateTask } from "../hooks/useUpdateTask";
+import { useLocation, useParams } from "react-router-dom";
 
 function UpdateTask() {
 
@@ -20,36 +21,65 @@ function UpdateTask() {
   const { tasks, } = useTaskList();
   const { users, } = useUserList();
 
-  // On charge les données de la tâche sélectionnée
+  const { taskId: urlTaskId } = useParams();
+  const location = useLocation();
+  const passedTaskData = location.state?.taskData;
+
+  // Effet pour initialiser selon la source de données
   useEffect(() => {
-    if (!taskId) return;
-
-    try {
-      const taskIdInt = parseInt(taskId);
-      const urlInitialTask = API_URLS.getTaskById(taskIdInt);
-
-      fetch(urlInitialTask)
-        .then(response => response.json())  // transforme la réponse http en objet JavaScript
-        .then(data => {
-          setInitialTask(data);
-          setTitle(data.title);
-          setDescription(data.description);
-          setComment(data.comment);
-          setUserId(data.user_id);
-          setStatus(data.status);
-        })
-        .catch(err => {
-          console.error(err.message);
-          alert(`Can't load user data for task ID "${taskId}".`);
-        });
-
-    } catch (err) {
-      console.error(err.message);
-      alert(err.message);
+    // Cas 1 : on a récupéré toutes les données de la tâche
+    if (passedTaskData) {
+      console.log("Cas données reçues");
+      setInitialTask(passedTaskData);
+      setTaskId(passedTaskData.id);
+      setTitle(passedTaskData.title);
+      setDescription(passedTaskData.description);
+      setComment(passedTaskData.comment);
+      setUserId(passedTaskData.userId);
+      setStatus(passedTaskData.status);
       return;
     }
 
-  }, [taskId]); 
+    // Cas 2 : on a récupéré l'ID dans le lien URL
+    if (urlTaskId) {
+      console.log("Cas ID récupéré dans l'URL");
+      setTaskId(urlTaskId); // initialisation des données dans le prochain useEffect
+      return;
+    }
+
+    // Cas 3 : on a rien, accès direct sur la page (choix par DDL), on ne fait rien
+    console.log("Cas d'accès direct, aucun paramètre");
+  }, [urlTaskId, passedTaskData]);
+
+  // On charge les données de la tâche sélectionnée
+  useEffect(() => {
+    if (!taskId || passedTaskData) return;
+
+    const loadTask = async () => {
+      try {
+        const taskIdInt = parseInt(taskId);
+        const urlInitialTask = API_URLS.getTaskById(taskIdInt);
+        const response = await fetch(urlInitialTask);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} : ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setInitialTask(data);
+        setTitle(data.title);
+        setDescription(data.description);
+        setComment(data.comment);
+        setUserId(data.user_id);
+        setStatus(data.status);
+
+      } catch (err) {
+        console.error(err.message);
+        alert(err.message);
+      }
+    };
+
+    loadTask();
+  }, [taskId, passedTaskData]); 
 
   const updates = {
     title,  // Equivalent à title: title
@@ -76,13 +106,21 @@ function UpdateTask() {
     }
   };
 
+  const showTaskSelector = !urlTaskId && !passedTaskData;
+  const showTaskForm = taskId && initialTask;
+
   return (
     <div>
       <h1>Update a task</h1>
       <form onSubmit={handleSubmit}>
-        <SelectTaskDDL tasks={tasks} value={taskId} onChange={e => setTaskId(e.target.value)} label="Task to update : " required />
+        {showTaskSelector && (<SelectTaskDDL tasks={tasks} value={taskId} onChange={e => setTaskId(e.target.value)} label="Task to update : " required />)}
+        
+        {/* Affichage du nom de la tâche si on ne montre pas de DDL */}
+        {!showTaskSelector && initialTask && (
+          <div style={{marginBottom:'1rem', fontWeight:'bold'}}>Edit {initialTask.title} ({initialTask.id})</div>
+        )}
 
-        {taskId && (
+        {showTaskForm && (
           <>
             <div>
               <label>Title: </label>

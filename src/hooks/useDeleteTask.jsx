@@ -18,7 +18,7 @@ export function useDeleteTask() {
       });
       if (!response.ok) {
         const error = await response.json();
-        throw new Error (error.Detail || `HTTP ${response.status} : ${response.statusText}`);
+        throw new Error (error.detail || `HTTP ${response.status} : ${response.statusText}`);
       }
 
       console.log(`Task with ID "${taskId}" deleted`);

@@ -1,9 +1,21 @@
 // Composant affichant la liste des projets
-import { useTaskById } from "../hooks/useTaskById";
 import { TaskItem } from "./TaskItem";
-import { TaskSelector } from "./TaskSelector";
+import { Link, useNavigate } from "react-router-dom";
 
 export function ShowProjects({ projects }) {
+  const navigate = useNavigate();
+  // Cas 1 : on passe toute les données du projet à éditer
+  const handleEditProjectWithData = (project) => {
+    navigate(`/projects/update-project`, {
+      state: { projectData: project }
+    });
+  };
+
+  const handleEditProjectWithId = (projectId) => {
+    navigate(`/projects/update-project/${projectId}`);
+  };
+  
+
   return (
     <ul>
       {projects.map((project) => (
@@ -25,6 +37,9 @@ export function ShowProjects({ projects }) {
               )}
             </div>
           </div>
+          <Link to={`/projects/details/${project.id}`}>Details</Link>
+          <button onClick={() => handleEditProjectWithData(project)}>Edit (with data)</button>
+          <button onClick={() => handleEditProjectWithId(project.id)}>Edit (ID only)</button>
         </li>
       ))}
     </ul>
