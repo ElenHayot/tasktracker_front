@@ -9,12 +9,54 @@ const API_CONFIG = {
         tasks: "/tasks",
         projects: "/projects"
     },
-    version: "/api/v1" // à gérer lors du versionning
+    version: `/api/v1`, // valeur par défaut
+    _initialized: false // Flag pour éviter les multiples initialisations
 };
+
+// Fonction pour récupérer la version depuis le backend
+export async function fetchApiVersion() {
+    try {
+        const response = await fetch(`${API_CONFIG.baseUrl}/api/version`);
+        if (!response.ok) {
+            throw new Error (`HTTP ${response.status} : ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data.version;
+    } catch (error) {
+        console.warn(`Could not fetch API version, using default: `, API_CONFIG.version);
+        return API_CONFIG.version.replace('/api/','');  // retourne juste "v1"
+    }
+}
+
+// Fonction pour initialiser/mettre à jour la version
+export async function initializeApiConfig() {
+    if (API_CONFIG._initialized) {
+        return API_CONFIG.version;
+    }
+
+    try {
+        const version = await fetchApiVersion();
+        API_CONFIG.version = `/api/${version}`;
+        API_CONFIG._initialized = true;
+        console.log(`API version initialized: `, API_CONFIG.version);
+    } catch (error) {
+        console.warn(`Failed to initialize API version: `, error);
+        // On garde dans ce cas la version par défaut
+        API_CONFIG._initialized = true;
+    }
+
+    return API_CONFIG.version;
+}
+
+// Fonction pour forcer la mise à jour de la version (utile pour les tests ou changements manuels)
+export function updateApiVersion(newVersion) {
+    API_CONFIG.version = `/api/${newVersion}`;
+    console.log(`API version manually updated to: `, API_CONFIG.version);
+}
 
 // Fonction pour construire les URLs
 export function buildApiUrl(endpoint, id = null, queryParams = {}) {
-    let url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints[endpoint]}`;
+    let url = `${API_CONFIG.baseUrl}${API_CONFIG.version}${API_CONFIG.endpoints[endpoint]}`;
 
     if (id) {
         url += `/${id}`;
@@ -58,5 +100,15 @@ export const API_URLS = {
     getUserTasks: (userId) => buildApiUrl("users", `${userId}/tasks/`),
 
 };
+
+// Get pour accéder à la config (utile pour déboguer)
+export function getApiConfig() {
+    return { ...API_CONFIG };
+}
+
+// Fonction utilitaire pour vérifier si l'API est initialisée
+export function isInitialized() {
+    return API_CONFIG._initialized;
+}
 
 export default API_CONFIG;
