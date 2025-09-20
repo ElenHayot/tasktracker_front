@@ -7,7 +7,9 @@ const API_CONFIG = {
     endpoints: {
         users: "/users",
         tasks: "/tasks",
-        projects: "/projects"
+        projects: "/projects",
+        login: "/auth/login-json",
+        me: "/auth/me",
     },
     version: `/api/v1`, // valeur par défaut
     _initialized: false // Flag pour éviter les multiples initialisations
@@ -98,6 +100,11 @@ export const API_URLS = {
     // GET /projects/123/tasks
     getProjectTasks: (projectId) => buildApiUrl("projects", `${projectId}/tasks/`),
     getUserTasks: (userId) => buildApiUrl("users", `${userId}/tasks/`),
+
+    // Authentification
+    getLogin: () => buildApiUrl("login"),
+    getMe: () => buildApiUrl("me"),
+
 
 };
 

@@ -1,5 +1,6 @@
 // Hook permettant de récupérer les données de l'utilisateur connecté
 import { createContext, useContext, useEffect, useState } from "react";
+import { API_URLS } from "../config/api";
 
 // On crée "conteneur" vide qui contiendra nos données d'authentification
 const AuthContext = createContext();
@@ -8,21 +9,52 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   // Etats React pour stocker nos données
   const [user, setUser] = useState(null);     // Infos de l'utilisareur (null = pas connecté)
-  const [loading, setLoading] = useState(true);       // true pendant qu'on vérifie que le user est connecté, false après
+  const [loading, setLoading] = useState(false);       // true pendant qu'on vérifie que le user est connecté, false après
   const [token, setToken] = useState(localStorage.getItem('token'));  // Le token JWT stocké dans le navigateur (localStorage)
 
+  // Fonction de connexion
+  const login = async (email, password) => {
+    setLoading(true);
+    try {
+      const urlLogin = API_URLS.getLogin();
+      const response = await fetch(urlLogin, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setToken(data.access_token);
+        localStorage.setItem("token", data.access_token);
+
+        await fetchUserInfo(data.access_token);
+        return { success: true };
+      } else {
+        const error = await response.json();
+        return { success: false, message: error.detail || "Login error" };
+      }
+
+    } catch (error) {
+      return { success: false, message: "Network error" };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Fonction qui récupère les infos utilisateurs
-  const fetchUserInfo = async () => {
+  const fetchUserInfo = async (authToken) => {
     // Si pas de token == si user pas connecté
-    if (!token) {
+    if (!authToken) {
       setLoading(false);
       return;
     }
 
     try {
+      const urlMe = API_URLS.getMe();
       // On demande à l'API les infos du user connecté
-      const response = await fetch(`http://localhost:8000/me`, {
-        header: { 'Authorization': `Bearer ${token}` }
+      const response = await fetch(urlMe, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
       });
 
       if (response.ok) {
@@ -40,16 +72,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Fonction de déconnexion
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("token");
+  }
+
   // useEffect pour déclencher quand le composant se monte ou que 'token' change (connexion/déconnexion)
   useEffect(() => {
-    fetchUserInfo();
-  }, [token]);
+    if (token && !user) {
+      fetchUserInfo();
+    }
+  }, [token, user]);
 
   // On fournit les données à tous les composants
   // On remplit notre boîte magique AuthContext
   // children = tous les composants enfants qui pourront accéder à ces données
   return (
-    <AuthContext.Provider value={{ user, setUser, token, setToken, loading }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>{children}</AuthContext.Provider>
   );
 };
 

@@ -16,9 +16,26 @@ import UserDetail from "./pages/UserDetail";
 import ProjectDetail from "./pages/ProjectDetail";
 import { BurgerMenu } from "./components/BurgerMenu";
 import './App.css';
-import { AuthProvider } from "./hooks/useAuth";
+import { AuthProvider, useAuth } from "./hooks/useAuth";
+import { LoginForm } from "./components/LoginForm";
+import { DashBoard } from "./components/DashBoard";
 
-function App() {
+// Composant racine avec gestion de l'authentification
+const App = () => {
+  const { user, token } = useAuth();
+
+  console.log(`user = ${user}`);
+  console.log(`token = ${token}`);
+  // Si pas de token ou pas d'utilisateur, on affiche la page d'authentification
+  if (!token || !user) {
+    return <LoginForm />;
+  }
+
+  // Sinon on affiche le dashboard
+  return <DashBoard />;
+}
+
+function AuthApp() {
   return (
     <AuthProvider>
       <div className="App">
@@ -28,7 +45,7 @@ function App() {
           {/* Attention, l'ordre des routes compte, prise en compte de l'URL la plus spécifique d'abord à la plus générique à la fin */}
           <div className="main-content">
             <Routes>
-              <Route path="/" element={<h1>Bienvenue 👋</h1>} />
+              <Route path="/" element={<App />} />
               <Route path="/users/" element={<Users />} />
               <Route path="/users/details/:userId" element={<UserDetail />} />
               <Route path="/users/create-user" element={<CreateUser />} />
@@ -55,4 +72,4 @@ function App() {
   );
 }
 
-export default App;
+export default AuthApp;
