@@ -1,7 +1,8 @@
 // Configuration centralisée des URLs
 
 const API_CONFIG = {
-    baseUrl: import.meta.env?.VITE_API_URL ||
+    baseUrl: import.meta.env?.VITE_BACKEND_URL ||
+            import.meta.env?.VITE_API_URL ||
             window.REACT_APP_API_URL || 
             "http://localhost:8000",
     endpoints: {

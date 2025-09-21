@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }) => {
       const response = await fetch(urlMe, {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
-
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
@@ -82,15 +81,22 @@ export const AuthProvider = ({ children }) => {
   // useEffect pour déclencher quand le composant se monte ou que 'token' change (connexion/déconnexion)
   useEffect(() => {
     if (token && !user) {
-      fetchUserInfo();
+      fetchUserInfo(token);
     }
   }, [token, user]);
 
   // On fournit les données à tous les composants
   // On remplit notre boîte magique AuthContext
   // children = tous les composants enfants qui pourront accéder à ces données
+  const value = {
+    user,
+    token,
+    login,
+    logout,
+    loading
+  };
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
   );
 };
 
