@@ -1,9 +1,8 @@
 .burger-button {
-  position: fixed;
   background-color: rgb(37 99 235);
-  top: 1rem;
-  left: 1rem;
   z-index: 50;
+  width: 40px;
+  height: 40px;
   padding: 0.5rem;
   color: white;  /*text-white*/
   border-radius: 0.375rem;

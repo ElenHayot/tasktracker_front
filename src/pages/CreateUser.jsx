@@ -10,14 +10,16 @@ function CreateUser() {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
   const [taskIds, setTaskIds] = useState("");
+  const [password, setPassword] = useState("");
 
   const userData = {
-    name: name,
-    firstname: firstname,
-    email: email,
-    phone: phone,
-    role: role,
-    task_ids: taskIds ? taskIds.map(Number) : ""
+    name,
+    firstname,
+    email,
+    phone,
+    role,
+    task_ids: taskIds ? taskIds.map(Number) : "",
+    password
   };
 
   const createUser = useCreateUser();
@@ -50,6 +52,10 @@ function CreateUser() {
         <div>
           <label>Email: </label>
           <input type="text" value={email} onChange={e => setEmail(e.target.value)} required />
+        </div>
+        <div>
+          <label>Password: </label>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
         </div>
         <div>
           <label>Phone : </label>

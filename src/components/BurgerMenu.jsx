@@ -3,7 +3,7 @@ import { Menu, X, ChevronDown, ChevronRight, User, FolderOpen, CheckSquare } fro
 import { useNavigate } from "react-router-dom";
 import './BurgerMenu.css';
 
-export const BurgerMenu = () => {
+export function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const navigate = useNavigate();

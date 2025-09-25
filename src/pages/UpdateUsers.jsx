@@ -7,6 +7,7 @@ import { TaskSelector } from "../components/TaskSelector";
 import { API_URLS } from "../config/api";
 import { useUpdateUser } from "../hooks/useUpdateUser";
 import { useLocation, useParams } from "react-router-dom";
+import { usePermissions } from "../hooks/usePermissions";
 
 function UpdateUser() {
 
@@ -17,6 +18,7 @@ function UpdateUser() {
   const [taskIds, setTaskIds] = useState([]);
   const { users, } = useUserList();
   const [initialUser, setInitialUser] = useState(null);
+  const { canAccess } = usePermissions();
 
   // Récupération des paramètres de navigation
   const { userId: urlUserId } = useParams(); // ID depuis l'URL
@@ -127,10 +129,12 @@ function UpdateUser() {
               <label>Phone: </label>
               <input type="text" value={phone} onChange={e => setPhone(e.target.value)} />
             </div>
-            <div>
-              <label>Role: </label>
-              <RolesSelect value={role} onChange={setRole} />
-            </div>
+            {canAccess('roles') &&
+              <div>
+                <label>Role: </label>
+                <RolesSelect value={role} onChange={setRole} />
+              </div>
+            }
             <TaskSelector selectedTaskIds={taskIds} onTaskIdsChange={setTaskIds} label="Associated tasks : " />
             <button type="submit">SUBMIT</button>
           </>

@@ -1,8 +1,9 @@
 import { useAuth } from "../hooks/useAuth"
+import './Dashboard.css';
 
 // Composant principal de l'application
-export const DashBoard = () => {
-  const { user, logout } = useAuth();
+export function DashBoard() {
+  const { user, } = useAuth();
 
   return (
     <div className="dashboard-container">
@@ -13,7 +14,6 @@ export const DashBoard = () => {
           </div>
           <div className="nav-right">
             <span className="user-greeting">Hello, {user?.firstname} {user?.name}</span>
-            <button className="logout-button" onClick={logout}>Disconnect</button>
           </div>
         </div>
       </nav>

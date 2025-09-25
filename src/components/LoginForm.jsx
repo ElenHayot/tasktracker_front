@@ -1,12 +1,17 @@
 import { useState } from "react"
 import { useAuth } from "../hooks/useAuth";
 import './LoginForm.css';
+import { useLocation, useNavigate } from "react-router-dom";
 
-export const LoginForm = () => {
+export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login, loading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from || '/';
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,6 +30,7 @@ export const LoginForm = () => {
 
     // Reset password field pour sécurité
     setPassword("");
+    navigate(redirectTo);
   };
 
   const handleKeyPress = (event) => {

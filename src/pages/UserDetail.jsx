@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserById } from "../hooks/useUserById";
 import { TaskItem } from "../components/TaskItem";
 
@@ -6,6 +6,13 @@ function UserDetail() {
   const { userId } = useParams();
   console.log(`userId = ${userId}`);
   const { user, loading } = useUserById(userId);
+  const navigate = useNavigate();
+
+  const handleUpdateButtonClick = () => {
+    navigate(`/users/update-user/${userId}`, {
+      state: {userData: user}
+    })
+  };
 
   if (loading) {
     return(<div>Loading user data ...</div>);
@@ -34,6 +41,7 @@ function UserDetail() {
           </div>
         </div>
       </div>
+      <button type="submit" onClick={handleUpdateButtonClick}>Update</button>
     </div>
   );
 

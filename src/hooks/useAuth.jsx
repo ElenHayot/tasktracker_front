@@ -1,6 +1,7 @@
 // Hook permettant de récupérer les données de l'utilisateur connecté
 import { createContext, useContext, useEffect, useState } from "react";
 import { API_URLS } from "../config/api";
+import { useNavigate } from "react-router-dom";
 
 // On crée "conteneur" vide qui contiendra nos données d'authentification
 const AuthContext = createContext();
@@ -11,9 +12,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);     // Infos de l'utilisareur (null = pas connecté)
   const [loading, setLoading] = useState(false);       // true pendant qu'on vérifie que le user est connecté, false après
   const [token, setToken] = useState(localStorage.getItem('token'));  // Le token JWT stocké dans le navigateur (localStorage)
+  //const navigate = useNavigate();
 
   // Fonction de connexion
-  const login = async (email, password) => {
+  const login = async (email, password, path = '/') => {
     setLoading(true);
     try {
       const urlLogin = API_URLS.getLogin();
@@ -29,6 +31,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("token", data.access_token);
 
         await fetchUserInfo(data.access_token);
+        //navigate(path);
         return { success: true };
       } else {
         const error = await response.json();
