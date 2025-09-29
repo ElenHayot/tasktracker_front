@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_URLS } from "../config/api";
+import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useProjectById(projectId) {
   const [project, setProject] = useState(null);
@@ -18,7 +19,9 @@ export function useProjectById(projectId) {
         const projectIdInt = parseInt(projectId);
         const url = API_URLS.getProjectById(projectIdInt);
 
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: getAuthHeaders()
+        });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status} : ${response.statusText}`);
         }

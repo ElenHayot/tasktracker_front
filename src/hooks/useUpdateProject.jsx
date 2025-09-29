@@ -3,6 +3,7 @@ import { getModifiedFields } from "../utils/getModifiedFields";
 import { parseToInt } from "../utils/parseToInt";
 import { API_URLS } from "../config/api";
 import { useCallback } from "react";
+import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useUpdateProject() {
 
@@ -19,7 +20,7 @@ export function useUpdateProject() {
 
       const response = await fetch(url, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(payloadUpdates)
       });
       if (!response.ok) {

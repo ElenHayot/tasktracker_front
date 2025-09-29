@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getModifiedFields } from "../utils/getModifiedFields";
 import { parseToInt } from "../utils/parseToInt";
 import { API_URLS } from "../config/api";
+import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useUpdateUser() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export function useUpdateUser() {
 
       const response = await fetch(url, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(payloadUpdates)
       });
       if (!response.ok) {

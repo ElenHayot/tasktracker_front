@@ -1,6 +1,7 @@
 // Composant récupérant la liste des users en base
 import { useState, useEffect } from "react";
 import { API_URLS } from "../config/api";
+import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useUserList(){
   const [users, setUsers] = useState([]);
@@ -12,7 +13,9 @@ export function useUserList(){
       try {
         const url = API_URLS.getUsers();
 
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: getAuthHeaders()
+        });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status} : ${response.statusText}`);
         }

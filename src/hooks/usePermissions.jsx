@@ -1,40 +1,57 @@
 import { useAuth } from "./useAuth";
+import { ROLE_PERMISSIONS, createPermissionChecker } from "../../permissions.config";
+import { useMemo } from "react";
 
 export function usePermissions() {
   const { user } = useAuth();
+  // Récupérer la liste des roles
+  // const roles = fetch()
+
+  // ✅ Mise en cache du permissionChecker
+  const permissionChecker = useMemo(() => {
+    if (!user?.role) return null;
+
+    const userPermissions = ROLE_PERMISSIONS[user.role];
+    if (!userPermissions) return null;
+
+    console.log(`Creating permission checker for role: ${user.role}`);
+    console.log(`Base permissions:`, userPermissions);
+
+    const checker = createPermissionChecker(userPermissions);
+    console.log(`Resolved permissions:`, checker.getAllPermissions());
+
+    return checker;
+  }, [user?.role]); // Recalcule seulement si le role change
+
   const hasRole = (role) => {
     return user?.role == role;
   };
 
   const canAccess = (resource) => {
-    if (!user) return false;
+    if (!permissionChecker) {
+      console.warn(`No permission checker available. User role: ${user?.role}`);
+      return false;
+    }
 
-    /* read = lecture resource, write = création de resource, update = mise à jour, delete = suppression */
-    /* users, projects, tasks = accès chemin de base : read, write, update, delete impossible si pas d'accès de base*/
-    const permissions = {
-      'Administrator': [
-        'users', 'users-read', 'users-write', 'users-update', 'users-delete',
-        'projects', 'projects-read', 'projects-write', 'projects-update', 'projects-delete',
-        'tasks', 'tasks-read', 'tasks-write', 'tasks-update', 'tasks-delete',
-        'roles'
-      ],
-      'User': [
-        'users', 'users-read',
-        'projects', 'projects-read', 
-        'tasks', 'tasks-read', 'tasks-write', 'tasks-update', 'tasks-delete'
-      ],
-      'Guest': ['users', 'users-read']
-    };
+    const hasPermission = permissionChecker.canAccess(resource);
 
-    return permissions[user.role]?.includes(resource) || false;
-  }
+    // Debug seulement en développement
+    console.log(`Permission check: '${resource}' = ${hasPermission}`);
+
+    return hasPermission;
+  };
 
   return {
     hasRole,
     canAccess,
+
     isAdmin: user?.role === 'Administrator',
     isModerator: user?.role === 'Moderator',
     isUser: user?.role === 'User',
-    isGuest: user?.role === 'Guest'
+    isGuest: user?.role === 'Guest',
+
+    // Debug info (utile en développement)
+    getAllPermissions: () => permissionChecker?.getAllPermissions() || [],
+    currentRole: user?.role
   };
 }

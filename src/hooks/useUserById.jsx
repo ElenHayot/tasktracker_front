@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { parseToInt } from "../utils/parseToInt";
 import { API_URLS } from "../config/api";
+import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useUserById(userId) {
 
@@ -20,7 +21,9 @@ export function useUserById(userId) {
         const userIdInt = parseToInt(userId); // peut planter, d'où le try/catch
         const url = API_URLS.getUserById(userIdInt);
 
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: getAuthHeaders()
+        });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status} : ${response.statusText}`);
         }

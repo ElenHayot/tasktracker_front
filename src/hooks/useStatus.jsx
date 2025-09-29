@@ -1,39 +1,36 @@
-// Composant récupérant la liste des tâches présentes en base
 import { useEffect, useState } from "react";
 import { API_URLS } from "../config/api";
 import { getAuthHeaders } from "../utils/getAuthHeaders";
 
-export function useTaskList(){
-  const [tasks, setTasks] = useState([]);
+export function useStatus() {
+  const [status, setStatus] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-
-    const loadTasks = async () => {
+    const fetchStatus = async () => {
       try {
-        const url = API_URLS.getTasks();
+        setLoading(true);
+        setError(null);
         
-        const response = await fetch(url, {
-          headers: getAuthHeaders()
-        });
+        const url = API_URLS.getStatus();
+        const response = await fetch(url, { headers: getAuthHeaders() });
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status} : ${response.statusText}`);
         }
 
         const data = await response.json();
-        setTasks(data);
-
-      } catch (err) {
-        console.error(err.message);
+        setStatus(data);
+      } catch (error) {
+        setError(error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    loadTasks();
-
+    fetchStatus();
   }, []);
 
-  return { tasks, loading };
-
+  return { status, loading, error };
 }

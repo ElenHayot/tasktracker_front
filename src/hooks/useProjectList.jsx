@@ -1,6 +1,7 @@
 // Composant récupérant la liste des projets en base
 import { useEffect, useState } from "react";
 import { API_URLS } from "../config/api";
+import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useProjectList() {
   const [projects, setProjects] = useState([]);
@@ -12,7 +13,9 @@ export function useProjectList() {
       try {
         const url = API_URLS.getProjects();
         
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: getAuthHeaders()
+        });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status} : ${response.statusText}`);
         }

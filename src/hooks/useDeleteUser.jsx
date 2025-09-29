@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
 import { API_URLS } from "../config/api";
+import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useDeleteUser() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export function useDeleteUser() {
 
       const response = await fetch(url,{
         method: "DELETE",
-        headers: { "Content-Type": "application/json" }  // pas besoin de body lors du delete, paramètre dans l'URL
+        headers: getAuthHeaders()  // pas besoin de body lors du delete, paramètre dans l'URL
       });
       if (!response.ok) {
         const error = await response.json();

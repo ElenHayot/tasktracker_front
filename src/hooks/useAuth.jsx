@@ -85,6 +85,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token && !user) {
       fetchUserInfo(token);
+    } else if (!token && !user) {
+      setUser({ id: null, role: 'Guest', name: 'Doe', firstname: 'John' });
     }
   }, [token, user]);
 

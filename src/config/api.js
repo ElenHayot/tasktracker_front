@@ -11,6 +11,8 @@ const API_CONFIG = {
         projects: "/projects",
         login: "/auth/login-json",
         me: "/auth/me",
+        roles: "/roles",
+        status: "/status",
     },
     version: `/api/v1`, // valeur par défaut
     _initialized: false // Flag pour éviter les multiples initialisations
@@ -105,6 +107,8 @@ export const API_URLS = {
     // Authentification
     getLogin: () => buildApiUrl("login"),
     getMe: () => buildApiUrl("me"),
+    getRoles: () => buildApiUrl("roles"),
+    getStatus: () => buildApiUrl("status"),
 
 
 };

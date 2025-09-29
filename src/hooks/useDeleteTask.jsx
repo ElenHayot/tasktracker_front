@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseToInt } from "../utils/parseToInt";
 import { API_URLS } from "../config/api";
+import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useDeleteTask() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export function useDeleteTask() {
 
       const response = await fetch(url, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" }
+        headers: getAuthHeaders()
       });
       if (!response.ok) {
         const error = await response.json();
