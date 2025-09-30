@@ -130,7 +130,8 @@ export const ROLE_PERMISSIONS = {
         PERMISSIONS.TASKS_WRITE
     ],
     Guest: [
-        PERMISSIONS.USERS_CREATE
+        PERMISSIONS.USERS_CREATE,
+        PERMISSIONS.ROLES
     ],
 
 };
