@@ -4,10 +4,11 @@ import { useUserList } from "../hooks/useUserList";
 import { RolesSelect } from "../components/RolesSelect";
 import { SelectUserDDL } from "../components/SelectUserDDL";
 import { TaskSelector } from "../components/TaskSelector";
-import { API_URLS } from "../config/api";
+import API_CONFIG, { API_URLS } from "../config/api";
 import { useUpdateUser } from "../hooks/useUpdateUser";
 import { useLocation, useParams } from "react-router-dom";
 import { usePermissions } from "../hooks/usePermissions";
+import { useAuth } from "../hooks/useAuth";
 
 function UpdateUser() {
 
@@ -16,9 +17,11 @@ function UpdateUser() {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
   const [taskIds, setTaskIds] = useState([]);
+  const [password, setPassword] = useState("");
   const { users, } = useUserList();
   const [initialUser, setInitialUser] = useState(null);
   const { canAccess } = usePermissions();
+  const { user: currentUser, } = useAuth();
 
   // Récupération des paramètres de navigation
   const { userId: urlUserId } = useParams(); // ID depuis l'URL
@@ -86,7 +89,8 @@ function UpdateUser() {
     email: email,
     phone: phone,
     role: role,
-    task_ids: taskIds
+    task_ids: taskIds,
+    password
   };
 
   const updateUser = useUpdateUser();
@@ -106,6 +110,8 @@ function UpdateUser() {
   // Gestion de l'affichage selon le mode
   const showUserSelector = !urlUserId && !passedUserData;
   const showUserForm = userId && initialUser;
+  const canUpdatePassword = currentUser.id == userId || currentUser.email == API_CONFIG.adminTasktrackerEmail;
+  console.log(`UpdateUser: canUpdatepassword = ${canUpdatePassword}, currentUser.id = ${currentUser.id}, currentUser.email = ${currentUser.email}`);
 
   return (
     <div>
@@ -135,6 +141,12 @@ function UpdateUser() {
                 <RolesSelect value={role} onChange={setRole} />
               </div>
             }
+            {canUpdatePassword && (
+              <div>
+                <label>Password: </label>
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+              </div>
+            )}
             <TaskSelector selectedTaskIds={taskIds} onTaskIdsChange={setTaskIds} label="Associated tasks : " />
             <button type="submit">SUBMIT</button>
           </>

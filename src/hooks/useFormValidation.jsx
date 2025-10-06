@@ -3,7 +3,6 @@ import { useState } from "react";
 export function useFormValidation( validationRules ) {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-  console.log('hello');
 
   const validateField = (fieldName, value) => {
     const rules = validationRules[fieldName];
@@ -22,10 +21,8 @@ export function useFormValidation( validationRules ) {
   };
 
   const validateAllFields = (formData) => {
-    console.log('hello validateAllFields');
     const newErrors = {};
     let isValid = true;
-
     Object.keys(validationRules).forEach(fieldName => {
       const error = validateField(fieldName, formData[fieldName]);
       if (error) {
@@ -36,7 +33,6 @@ export function useFormValidation( validationRules ) {
 
     // On met à jour le state errors
     setErrors(newErrors);
-    console.log(`newErrors = ${newErrors}`);
 
     // On marque tous les champs comme touchés
     setTouched(Object.keys(validationRules).reduce((acc, field) => {
@@ -44,7 +40,6 @@ export function useFormValidation( validationRules ) {
       return acc;
     }, {}));
 
-    console.log(`validateAllFields, isValid = ${isValid}`);
     return isValid;
   };
 

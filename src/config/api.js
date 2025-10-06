@@ -4,7 +4,7 @@ const API_CONFIG = {
     baseUrl: import.meta.env?.VITE_BACKEND_URL ||
             import.meta.env?.VITE_API_URL ||
             window.REACT_APP_API_URL || 
-            "http://localhost:8000",
+            "https://localhost:8000",
     endpoints: {
         users: "/users",
         tasks: "/tasks",
@@ -15,7 +15,8 @@ const API_CONFIG = {
         status: "/status",
     },
     version: `/api/v1`, // valeur par défaut
-    _initialized: false // Flag pour éviter les multiples initialisations
+    _initialized: false, // Flag pour éviter les multiples initialisations
+    adminTasktrackerEmail: "admin@tasktracker.com", // Email de l'admin par défaut, qui a tous les droits
 };
 
 // Fonction pour récupérer la version depuis le backend

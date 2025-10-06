@@ -1,0 +1,26 @@
+.create-btn {
+    position: fixed;
+    top: 1rem;
+    right: 15rem;
+    color: green;
+    background-color: azure;
+    z-index: 50;
+}
+
+.update-btn {
+    position: fixed;
+    bottom: 5rem;
+    right: 1rem;
+    color: orangered;
+    background-color: antiquewhite;
+    z-index: 50;
+}
+
+.delete-btn {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    color: whitesmoke;
+    background-color: rgb(216, 16, 16);
+    z-index: 50;
+}

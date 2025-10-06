@@ -9,28 +9,20 @@ export function ShowTask({ tasks }) {
       state: { taskData: task }
     });
   };
-  const handleEditTaskWithId = (taskId) => {
-    navigate(`/tasks/update-task/${taskId}`);
-  };
 
 
   return (
-    <ul>
+    <ul className="relative-pt-12">
       {tasks.map((task) => (
-        <li key={task.id}>
+        <li key={task.id} className="list-container">
           <p>ID : {task.id} {'>>'}</p>
-          <span>
-            Title = {task.title} | 
-            {/* Description = {task.description}| 
-            Assigned project ID = {task.project_id} | 
-            Assigned user ID = {task.user_id} | 
-            Comment = {task.comment} | */}
-            Status = {task.status} 
+          <span className="label-container">
+            <label className="label">{task.title}</label>
+            <label className="status">{task.status}</label>
           </span>
-          <div>
-            <Link to={`/tasks/details/${task.id}`}>Details</Link>
-            <button onClick={() => handleEditTaskWithData(task)}>Edit (with data)</button>
-            <button onClick={() => handleEditTaskWithId(task.id)}>Edit (ID only)</button>
+          <div className="relative-pt-12">
+            <Link to={`/tasks/details/${task.id}`} className="link-container">Details</Link>
+            <button onClick={() => handleEditTaskWithData(task)} className="cpnt-update-btn">Edit</button>
           </div>
         </li>
       ))}

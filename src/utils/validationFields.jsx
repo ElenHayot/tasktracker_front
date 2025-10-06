@@ -67,7 +67,7 @@ export const validatePassword = (value) => {
 // ==================== VALIDATION GENERIQUE ==================== //
 
 export const validateRequired = (value, fieldName = 'This field') => {
-  if (!value || value.trim() == '') {
+  if (!value || value.trim == '') {
     return `${fieldName} is required`;
   }
   return '';

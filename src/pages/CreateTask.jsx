@@ -36,8 +36,9 @@ function CreateTask() {
     title: [
       (value) => validateRequired(value, 'Title')
     ],
-    projectId: [
-      (value) => validateRequired(value, 'Project ID')
+    // Attention ! le fieldName doit être le même que celui de l'objet envoyé à validateAllField (ici project_id au lieu de projectId)
+    project_id: [
+      (value) => validateRequired(value, 'project_id')
     ]
   };
   const { errors, touched, validateField, validateAllFields, setFieldTouched } = useFormValidation(validationRules);

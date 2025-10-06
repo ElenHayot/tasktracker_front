@@ -26,6 +26,7 @@ export function LoginForm() {
 
     if (!result.success) {
       setError(result.message);
+      alert(`Error : ${result.message}`);
     }
 
     // Reset password field pour sécurité

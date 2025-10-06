@@ -11,38 +11,21 @@ export function ShowProjects({ projects }) {
     });
   };
 
-  const handleEditProjectWithId = (projectId) => {
-    navigate(`/projects/update-project/${projectId}`);
-  };
-  
-
   return (
-    <ul>
+    <ul className="relative-pt-12">
       {projects.map((project) => (
-        <li key={project.id}>
+        <li key={project.id} className="list-container">
           <p>ID : {project.id} {'>>'}</p>
-          <span>
-            Title = {project.title} |
-            Description = {project.description} |
-            Comment = {project.comment} |
-            Status = {project.status} |
+          <span className="label-container">
+            <label className="label">{project.title}</label>
+            <label className="status">{project.status}</label>
           </span>
-          <div className="task-section">
-            <label className="task-label">Associated tasks</label>
-            <div className="task-container selected-tasks">
-              {project.task_ids.length == 0 ? (<p>No associated task</p>) : (
-                project.task_ids.map(taskId => (
-                  <TaskItem key={taskId} taskId={taskId} />
-                ))
-              )}
-            </div>
+          <div className="relative-pt-12">
+            <Link to={`/projects/details/${project.id}`} className="link-container">Details</Link>
+            <button onClick={() => handleEditProjectWithData(project)} className="cpnt-update-btn">Edit</button>
           </div>
-          <Link to={`/projects/details/${project.id}`}>Details</Link>
-          <button onClick={() => handleEditProjectWithData(project)}>Edit (with data)</button>
-          <button onClick={() => handleEditProjectWithId(project.id)}>Edit (ID only)</button>
         </li>
       ))}
     </ul>
   );
 }
- 

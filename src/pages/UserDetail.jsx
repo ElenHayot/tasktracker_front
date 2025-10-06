@@ -1,47 +1,73 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserById } from "../hooks/useUserById";
 import { TaskItem } from "../components/TaskItem";
+import './Buttons.css'
+import { useDeleteUser } from "../hooks/useDeleteUser";
+import { useAuth } from "../hooks/useAuth";
+import { usePermissions } from "../hooks/usePermissions";
+import { PERMISSIONS } from "../../permissions.config";
+import "../components/TaskSelector.css";
 
 function UserDetail() {
   const { userId } = useParams();
-  console.log(`userId = ${userId}`);
-  const { user, loading } = useUserById(userId);
+  const { user: userData, loading } = useUserById(userId);
+  const { user: currentUser, } = useAuth();
   const navigate = useNavigate();
+  const deleteUser = useDeleteUser();
+  const { canAccess } = usePermissions();
 
   const handleUpdateButtonClick = () => {
     navigate(`/users/update-user/${userId}`, {
-      state: {userData: user}
-    })
+      state: { userData: userData }
+    });
   };
 
+  const handleDeleteButtonClick = () => {
+    deleteUser(userId);
+  };
+
+  
   if (loading) {
-    return(<div>Loading user data ...</div>);
+    return (<div>Loading user data ...</div>);
   }
-  if (!user) {
-    return(<div>Unfound user</div>);
+  if (!userData) {
+    return (<div>Unfound user</div>);
   }
 
+  // Optimisation - Définition des variables après les conditions de nullité => évite de vérifier si currentUser ou userData sont nuls (cas lors du premier render)
+  const canUpdateUser = currentUser.id == userData.id || canAccess(PERMISSIONS.USERS_UPDATE);
+  const canDeleteAccount = currentUser.id == userData.id || canAccess(PERMISSIONS.USERS_DELETE);
+
   return (
-    <div>
-      <h1>{user.name} {user.firstname} - {user.id}</h1>
+    <div className="space-y-4">
+      <div className="relative pt-12">
+        {canUpdateUser && (
+          <button type="submit" onClick={handleUpdateButtonClick} className="update-btn">Edit</button>
+        )}
+        {canDeleteAccount && (
+          <button type="submit" onClick={handleDeleteButtonClick} className="delete-btn">Delete account</button>
+        )}
+      </div>
       <div>
-        <p>Name : {user.name}</p>
-        <p>FirstName : {user.firstname}</p>
-        <p>Email : {user.email}</p>
-        <p>Phone : {user.phone}</p>
-        <p>Role : {user.role}</p>
-        <div className="task-section">
-          <label className="task-label">Associated tasks : </label>
-          <div className="task-container selected-tasks">
-            {user.task_ids.length == 0 ? (<p>No associated task yet</p>) : (
-              user.task_ids.map(taskId => (
-              <TaskItem key={taskId} taskId={taskId} />
-              ))
-            )}
+        <h1>{userData.name} {userData.firstname} - {userData.id}</h1>
+        <div>
+          <p>Name : {userData.name}</p>
+          <p>FirstName : {userData.firstname}</p>
+          <p>Email : {userData.email}</p>
+          <p>Phone : {userData.phone}</p>
+          <p>Role : {userData.role}</p>
+          <div className="task-section">
+            <label className="task-label">Associated tasks : </label>
+            <div className="task-container selected-tasks">
+              {userData.task_ids.length == 0 ? (<p>No associated task yet</p>) : (
+                userData.task_ids.map(taskId => (
+                  <TaskItem key={taskId} taskId={taskId} />
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>
-      <button type="submit" onClick={handleUpdateButtonClick}>Update</button>
     </div>
   );
 

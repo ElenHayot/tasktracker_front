@@ -19,11 +19,14 @@ import { AuthProvider } from "./hooks/useAuth";
 import LoginUser from "./pages/LoginUser";
 import HomePage from "./pages/HomePage";
 import { Navigation } from "./components/Navigation";
+import { usePermissions } from "./hooks/usePermissions";
+import { PERMISSIONS } from "../permissions.config";
 
 function AppContent() {
+  const { canAccess } = usePermissions();
 
   return (
-    <div className="App">
+    <div className="app">
       <Router>
         <Navigation />
 
@@ -32,24 +35,48 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginUser />} />
-            <Route path="/users/" element={<Users />} />
-            <Route path="/users/details/:userId" element={<UserDetail />} />
-            <Route path="/users/create-user" element={<CreateUser />} />
-            <Route path="/users/update-user/:userId" element={<UpdateUser />} />
-            <Route path="/users/update-user" element={<UpdateUser />} />
-            <Route path="/users/delete-user" element={<DeleteUser />} />
-            <Route path="/projects/" element={<Projects />} />
-            <Route path="/projects/details/:projectId" element={<ProjectDetail />} />
-            <Route path="/projects/create-project" element={<CreateProject />} />
-            <Route path="/projects/update-project/:projectId" element={<UpdateProject />} />
-            <Route path="/projects/update-project" element={<UpdateProject />} />
-            <Route path="/projects/delete-project" element={<DeleteProject />} />
-            <Route path="/tasks/" element={<Tasks />} />
-            <Route path="/tasks/details/:taskId" element={<TaskDetail />} />
-            <Route path="/tasks/create-task" element={<CreateTask />} />
-            <Route path="/tasks/update-task/:taskId" element={<UpdateTask />} />
-            <Route path="/tasks/update-task" element={<UpdateTask />} />
-            <Route path="/tasks/delete-task" element={<DeleteTask />} />
+            {canAccess(PERMISSIONS.USERS_READ) && (
+              <>
+                <Route path="/users/" element={<Users />} />
+                <Route path="/users/details/:userId" element={<UserDetail />} />
+              </>
+            )}
+            {canAccess(PERMISSIONS.USERS_CREATE) && (<Route path="/users/create-user" element={<CreateUser />} />)}
+            {canAccess(PERMISSIONS.USERS_UPDATE) && (
+              <>
+                <Route path="/users/update-user/:userId" element={<UpdateUser />} />
+                <Route path="/users/update-user" element={<UpdateUser />} />
+              </>
+            )}
+            {canAccess(PERMISSIONS.USERS_DELETE) && (<Route path="/users/delete-user" element={<DeleteUser />} />)}
+            {canAccess(PERMISSIONS.PROJECTS_READ) && (
+              <>
+                <Route path="/projects/" element={<Projects />} />
+                <Route path="/projects/details/:projectId" element={<ProjectDetail />} />
+              </>
+            )}
+            {canAccess(PERMISSIONS.PROJECTS_CREATE) && (<Route path="/projects/create-project" element={<CreateProject />} />)}
+            {canAccess(PERMISSIONS.PROJECTS_UPDATE) && (
+              <>
+                <Route path="/projects/update-project/:projectId" element={<UpdateProject />} />
+                <Route path="/projects/update-project" element={<UpdateProject />} />
+              </>
+            )}
+            {canAccess(PERMISSIONS.PROJECTS_DELETE) && (<Route path="/projects/delete-project" element={<DeleteProject />} />)}
+            {canAccess(PERMISSIONS.TASKS_READ) && (
+              <>
+                <Route path="/tasks/" element={<Tasks />} />
+                <Route path="/tasks/details/:taskId" element={<TaskDetail />} />
+              </>
+            )}
+            {canAccess(PERMISSIONS.TASKS_CREATE) && (<Route path="/tasks/create-task" element={<CreateTask />} />)}
+            {canAccess(PERMISSIONS.TASKS_UPDATE) && (
+              <>
+                <Route path="/tasks/update-task/:taskId" element={<UpdateTask />} />
+                <Route path="/tasks/update-task" element={<UpdateTask />} />
+              </>
+            )}
+            {canAccess(PERMISSIONS.TASKS_DELETE) && (<Route path="/tasks/delete-task" element={<DeleteTask />} />)}
           </Routes>
         </div>
       </Router>

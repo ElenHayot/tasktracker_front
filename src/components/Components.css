@@ -1,0 +1,63 @@
+.label-container {
+    position: static;
+    align-items: center;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.label {
+    font-size: 1.125rem;
+    font-weight: bold;
+    text-align: center;
+    margin-inline-start: 2rem;
+    margin-inline-end: 1.125rem;
+    justify-content: space-around;
+}
+
+.email {
+    font-size: 1rem;
+    color: blue;
+    font-style: italic;
+    margin-inline-end: 1.125rem;
+}
+
+.user-role {
+    color: firebrick;
+    font-weight: bold;
+    font-size: 0.875rem;
+    margin-inline-start: 2rem;
+    margin-inline-end: 1.125rem;
+}
+
+/* Changer la couleur en fonction de la valeur du statut */
+.status {
+    color: blueviolet;
+    font-weight: bold;
+    font-size: 0.875rem;
+    margin-inline-start: 2rem;
+    margin-inline-end: 1.125rem;
+}
+
+.cpnt-update-btn {
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    right: 1rem;
+    color: orangered;
+    background-color: antiquewhite;
+    z-index: 50;
+    width: 3rem;
+    height: 2rem;
+    padding: 0.125rem;
+}
+
+.link-container {
+    position: absolute;
+    left: 1rem;
+}
+
+.list-container {
+    padding-top: 12px;
+    margin-block-start: 2rem;
+    margin-block-end: 2rem;
+}
