@@ -1,7 +1,7 @@
 import { useTaskList } from "../hooks/useTaskList";
 import { ShowTask } from "../components/ShowTasks";
 import { useNavigate } from "react-router-dom";
-import './Buttons.css';
+import './Pages.css';
 
 // monte le composant App (appelé dans main.jsx)
 function Tasks() {

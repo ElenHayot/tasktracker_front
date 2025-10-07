@@ -1,6 +1,6 @@
 // Composant affichant la liste des projets
-import { TaskItem } from "./TaskItem";
 import { Link, useNavigate } from "react-router-dom";
+import './Components.css';
 
 export function ShowProjects({ projects }) {
   const navigate = useNavigate();

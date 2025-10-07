@@ -5,8 +5,8 @@ import { BurgerMenu } from "./BurgerMenu";
 import { LogoutButton } from "./LogoutButton";
 import { LoginButton } from "./LoginButton";
 import { HomeButton } from "./HomeButton";
-import './Navigation.css';
 import { UserAcountButton } from "./UserAcountButton";
+import './Components.css';
 
 export function Navigation() {
   const { user, token } = useAuth();

@@ -1,6 +1,6 @@
 // Elément permettant de sélectionner et modifier une liste de tâches
 import { useTaskList } from "../hooks/useTaskList";
-import './TaskSelector.css';
+import './Components.css';
 
 export function TaskSelector({ selectedTaskIds, onTaskIdsChange, label = "Associated tasks : " }) {
   const { tasks, loading } = useTaskList();

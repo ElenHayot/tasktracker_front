@@ -1,5 +1,6 @@
 // Composant affichant une tâche inclue dans une liste
 import { useTaskById } from "../hooks/useTaskById";
+import './Components.css';
 
 export function TaskItem({ taskId }) {
     const { task, loading } = useTaskById(taskId);

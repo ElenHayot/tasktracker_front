@@ -1,6 +1,5 @@
 // Page permettant de créer une tâche
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { StatusSelect } from "../components/StatusSelect";
 import { useProjectList } from "../hooks/useProjectList";
 import { useUserList } from "../hooks/useUserList";

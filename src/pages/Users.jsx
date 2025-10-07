@@ -1,7 +1,7 @@
 import { useUserList } from "../hooks/useUserList";
 import { ShowUsers } from "../components/ShowUsers";
 import { useNavigate } from "react-router-dom";
-import './Buttons.css';
+import './Pages.css';
 
 // monte le composant App (appelé dans main.jsx)
 function Users() {

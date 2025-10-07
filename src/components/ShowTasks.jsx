@@ -1,6 +1,6 @@
 // Composant affichant la liste des tâches
-
 import { useNavigate, Link } from "react-router-dom";
+import './Components.css';
 
 export function ShowTask({ tasks }) {
   const navigate = useNavigate();

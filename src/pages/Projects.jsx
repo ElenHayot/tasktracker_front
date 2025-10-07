@@ -1,7 +1,7 @@
 import { useProjectList } from "../hooks/useProjectList";
 import { ShowProjects } from "../components/ShowProjects";
 import { useNavigate } from "react-router-dom";
-import './Buttons.css';
+import './Pages.css';
 
 // monte le composant App (appelé dans main.jsx)
 function Projects() {

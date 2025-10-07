@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Menu, X, ChevronDown, ChevronRight, User, FolderOpen, CheckSquare } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
-import './BurgerMenu.css';
 import { usePermissions } from "../hooks/usePermissions";
 import { PERMISSIONS } from "../../permissions.config";
+import './Components.css';
 
 export function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false);

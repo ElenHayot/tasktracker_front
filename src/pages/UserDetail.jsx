@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserById } from "../hooks/useUserById";
 import { TaskItem } from "../components/TaskItem";
-import './Buttons.css'
 import { useDeleteUser } from "../hooks/useDeleteUser";
 import { useAuth } from "../hooks/useAuth";
 import { usePermissions } from "../hooks/usePermissions";
 import { PERMISSIONS } from "../../permissions.config";
-import "../components/TaskSelector.css";
+import '../components/Components.css';
+import './Pages.css';
 
 function UserDetail() {
   const { userId } = useParams();

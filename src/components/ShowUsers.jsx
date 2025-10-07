@@ -1,8 +1,6 @@
 // Composant affichant la liste des utilisateurs
-import { TaskItem } from "./TaskItem";
 import { Link, useNavigate } from "react-router-dom";
-import './TaskSelector.css';
-import "./Components.css";
+import './Components.css';
 
 export function ShowUsers({ users }) {
   const navigate = useNavigate();

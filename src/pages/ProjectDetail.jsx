@@ -2,9 +2,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useProjectById } from "../hooks/useProjectById";
 import { TaskItem } from "../components/TaskItem";
 import { useDeleteProject } from "../hooks/useDeleteProject";
-import './Buttons.css';
 import { usePermissions } from "../hooks/usePermissions";
 import { PERMISSIONS } from "../../permissions.config";
+import '../components/Components.css';
+import './Pages.css';
 
 function ProjectDetail() {
   const { projectId } = useParams();  // Récupère les paramètres de l'url courante

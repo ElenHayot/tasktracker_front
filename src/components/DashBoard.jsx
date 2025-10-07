@@ -1,5 +1,5 @@
 import { useAuth } from "../hooks/useAuth"
-import './Dashboard.css';
+import './Components.css';
 
 // Composant principal de l'application
 export function DashBoard() {

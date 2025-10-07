@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useAuth } from "../hooks/useAuth";
-import './LoginForm.css';
 import { useLocation, useNavigate } from "react-router-dom";
+import './Components.css';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');

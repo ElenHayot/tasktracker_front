@@ -3,8 +3,8 @@ import { usePermissions } from "../hooks/usePermissions";
 import { useTaskById } from "../hooks/useTaskById";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteTask } from "../hooks/useDeleteTask";
-import './Buttons.css';
 import { PERMISSIONS } from "../../permissions.config";
+import './Pages.css';
 
 function TaskDetail() {
 
