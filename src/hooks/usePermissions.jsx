@@ -45,10 +45,10 @@ export function usePermissions() {
     hasRole,
     canAccess,
 
-    isAdmin: user?.role === 'Administrator',
-    isModerator: user?.role === 'Moderator',
-    isUser: user?.role === 'User',
-    isGuest: user?.role === 'Guest',
+    isAdmin: user?.role === 'ADMIN',
+    isModerator: user?.role === 'MODERATOR',
+    isUser: user?.role === 'USER',
+    isGuest: user?.role === 'GUEST',
 
     // Debug info (utile en développement)
     getAllPermissions: () => permissionChecker?.getAllPermissions() || [],

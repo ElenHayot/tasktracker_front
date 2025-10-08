@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }) => {
     if (token && !user) {
       fetchUserInfo(token);
     } else if (!token && !user) {
-      setUser({ id: null, role: 'Guest', name: 'Doe', firstname: 'John' });
+      setUser({ id: null, role: 'GUEST', name: 'Doe', firstname: 'John' });
     }
   }, [token, user]);
 
