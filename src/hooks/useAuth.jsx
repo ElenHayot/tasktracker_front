@@ -9,7 +9,7 @@ const AuthContext = createContext();
 // Gestionnaire de données
 export const AuthProvider = ({ children }) => {
   // Etats React pour stocker nos données
-  const [user, setUser] = useState(null);     // Infos de l'utilisareur (null = pas connecté)
+  const [user, setUser] = useState(null);     // Infos de l'utilisateur (null = pas connecté)
   const [loading, setLoading] = useState(false);       // true pendant qu'on vérifie que le user est connecté, false après
   const [token, setToken] = useState(localStorage.getItem('token'));  // Le token JWT stocké dans le navigateur (localStorage)
   //const navigate = useNavigate();
@@ -27,10 +27,17 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setToken(data.access_token);
-        localStorage.setItem("token", data.access_token);
+        setToken(data.access_token || data.token);
+        localStorage.setItem("token", data.access_token || data.token);
 
-        await fetchUserInfo(data.access_token);
+        // Case user info sent in response - else call fetchUserInfo
+        if (data.user) {
+          setUser(data.user);
+        }
+        else { 
+          await fetchUserInfo(data.access_token || data.token); 
+        }
+
         //navigate(path);
         return { success: true };
       } else {
@@ -83,6 +90,7 @@ export const AuthProvider = ({ children }) => {
 
   // useEffect pour déclencher quand le composant se monte ou que 'token' change (connexion/déconnexion)
   useEffect(() => {
+    console.log(`Token = ${token}`);
     if (token && !user) {
       fetchUserInfo(token);
     } else if (!token && !user) {

@@ -9,6 +9,7 @@ import { useCreateTask } from "../hooks/useCreateTask";
 import { validateRequired } from "../utils/validationFields";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { ErrorDisplay } from "../components/ErrorDisplay";
+import { mapTaskCreateForBackend } from "../config/backendMapper";
 
 function CreateTask() {
   const [title, setTitle] = useState("");
@@ -21,23 +22,18 @@ function CreateTask() {
   const { users, } = useUserList();
   const [showErrorModal, setShowErrorModal] = useState(false);
 
-  // objet json de type TaskCreate (api) avec les éléments strictement nécessaire pour renvoyer la requête
-  const taskData = {
-    title,
-    description,
-    comment,
-    project_id: projectId ? parseInt(projectId, 10) : "",  // "10" indique qu'on lit en base décimale
-    user_id: userId ? parseInt(userId, 10) : "", // si vide, supprimé ensuite par cleanObject(object)
-    status: status ? status : "" // si vide, supprimé ensuite par cleanObject(object)
-  };
+  // On mappe l'objet pour qu'il corresponde au type du backend avant de l'envoyer
+  const taskDataTmp = { title, description, comment, projectId, userId, status };
+  const taskData = mapTaskCreateForBackend(taskDataTmp);
 
   const validationRules = {
     title: [
       (value) => validateRequired(value, 'Title')
     ],
     // Attention ! le fieldName doit être le même que celui de l'objet envoyé à validateAllField (ici project_id au lieu de projectId)
-    project_id: [
-      (value) => validateRequired(value, 'project_id')
+    // Exception si on a un objet TMP (pour gestion de fieldnames en backend), on s'appuie sur les fieldnames de celui-ci
+    projectId: [
+      (value) => validateRequired(value, 'Project ID')
     ]
   };
   const { errors, touched, validateField, validateAllFields, setFieldTouched } = useFormValidation(validationRules);
@@ -46,7 +42,7 @@ function CreateTask() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const isValid = validateAllFields(taskData);
+    const isValid = validateAllFields(taskDataTmp);
     if (isValid) {
       try {
         await createTask(taskData);

@@ -1,18 +1,20 @@
 // Configuration centralisée des URLs
 
+export const API_BACKEND = import.meta.env.VITE_BACKEND_TYPE;
+
 const API_CONFIG = {
     baseUrl: import.meta.env?.VITE_BACKEND_URL ||
             import.meta.env?.VITE_API_URL ||
             window.REACT_APP_API_URL || 
-            "https://localhost:8000",
+            "http://localhost:8000",
     endpoints: {
         users: "/users",
         tasks: "/tasks",
         projects: "/projects",
-        login: "/auth/login-json",
+        login: API_BACKEND == "dotnet" ? "/auth/login" : "/auth/login-json",
         me: "/auth/me",
-        roles: "/roles",
-        status: "/status",
+        roles: API_BACKEND == "dotnet" ? "/common/roles" : "/roles",
+        status: API_BACKEND == "dotnet" ? "/common/status" : "/status",
     },
     version: `/api/v1`, // valeur par défaut
     _initialized: false, // Flag pour éviter les multiples initialisations

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_URLS } from "../config/api";
 import { getAuthHeaders } from "../utils/getAuthHeaders";
+import { mapProjectReadForBackend } from "../config/backendMapper";
 
 export function useProjectById(projectId) {
   const [project, setProject] = useState(null);
@@ -27,7 +28,10 @@ export function useProjectById(projectId) {
         }
 
         const data = await response.json();
-        setProject(data);
+        // On mappe l'objet selon le backend
+        const mappedProject = mapProjectReadForBackend(data);
+        // On envoie l'objet mappé
+        setProject(mappedProject);
       } catch (error) {
         console.error(error.message);
       } finally {

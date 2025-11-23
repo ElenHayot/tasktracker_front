@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { API_URLS } from "../config/api";
+import { API_URLS, API_BACKEND } from "../config/api";
 import { getAuthHeaders } from "../utils/getAuthHeaders";
 
 export function useRoles() {
@@ -15,6 +15,8 @@ export function useRoles() {
         setError(null);
 
         const url = API_URLS.getRoles();
+        console.log(`in usreRoles : api.js, API_BACKEND = ${API_BACKEND}`);
+        console.log(`In userRoles : url = ${url}`);
         const response = await fetch(url, { headers: getAuthHeaders()});
 
         if (!response.ok) {

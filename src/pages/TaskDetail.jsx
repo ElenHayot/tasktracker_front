@@ -49,8 +49,8 @@ function TaskDetail() {
         <div>
           <p>Description : </p>
           <div>{task.description}</div>
-          <p>Associated project : {task.project_id}</p>
-          <p>Associated user : {task.user_id}</p>
+          <p>Associated project : {task.projectId}</p>
+          <p>Associated user : {task.userId}</p>
           <p>Status : {task.status}</p>
           <p>Comment : </p>
           <div>{task.comment}</div>

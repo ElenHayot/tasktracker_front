@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { parseToInt } from "../utils/parseToInt";
 import { API_URLS } from "../config/api";
 import { getAuthHeaders } from "../utils/getAuthHeaders";
+import { mapTaskReadForBackend } from "../config/backendMapper";
 
 export function useTaskById(taskId) {
 
@@ -29,7 +30,10 @@ export function useTaskById(taskId) {
         }
 
         const data = await response.json();
-        setTask(data);
+        // On mappe l'objet selon le backend
+        const mappedTask = mapTaskReadForBackend(data);
+        // On envoie l'objet mappé
+        setTask(mappedTask);
 
       } catch (error) {
         console.error(error.message);

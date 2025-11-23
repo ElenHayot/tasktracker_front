@@ -59,8 +59,8 @@ function UserDetail() {
           <div className="task-section">
             <label className="task-label">Associated tasks : </label>
             <div className="task-container selected-tasks">
-              {userData.task_ids.length == 0 ? (<p>No associated task yet</p>) : (
-                userData.task_ids.map(taskId => (
+              {userData.taskIds.length == 0 ? (<p>No associated task yet</p>) : (
+                userData.taskIds.map(taskId => (
                   <TaskItem key={taskId} taskId={taskId} />
                 ))
               )}

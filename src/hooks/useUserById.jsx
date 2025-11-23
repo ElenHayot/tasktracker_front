@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { parseToInt } from "../utils/parseToInt";
 import { API_URLS } from "../config/api";
 import { getAuthHeaders } from "../utils/getAuthHeaders";
+import { mapUserReadForBackend } from "../config/backendMapper";
 
 export function useUserById(userId) {
 
@@ -29,7 +30,10 @@ export function useUserById(userId) {
         }
         
         const data = await response.json();
-        setUser(data);
+        // On map l'objet selon le backend
+        const mappedUser = mapUserReadForBackend(data);
+        // On envoie l'objet mappé
+        setUser(mappedUser);
 
       } catch (error) {
         console.error(error.message);

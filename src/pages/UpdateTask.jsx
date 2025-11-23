@@ -8,6 +8,7 @@ import { SelectTaskDDL } from "../components/SelectTaskDDL";
 import { API_URLS } from "../config/api";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 import { useLocation, useParams } from "react-router-dom";
+import { mapTaskUpdatesForBackend } from "../config/backendMapper";
 
 function UpdateTask() {
 
@@ -81,13 +82,9 @@ function UpdateTask() {
     loadTask();
   }, [taskId, passedTaskData]); 
 
-  const updates = {
-    title,  // Equivalent à title: title
-    description,
-    comment,
-    user_id: userId,  // noms différents back/front
-    status
-  };
+  // On mappe l'objet pour qu'il corresponde au type du backend avant de l'envoyer
+  const updatesTmp = { title, description, comment, userId, status };
+  const updates = mapTaskUpdatesForBackend(updatesTmp);
 
   const updateTask = useUpdateTask();
 

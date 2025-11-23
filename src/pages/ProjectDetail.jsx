@@ -53,8 +53,8 @@ function ProjectDetail() {
           <div className="task-section">
             <label className="task-label">Associated tasks : </label>
             <div className="task-container selected-tasks">
-              {project.task_ids.length == 0 ? (<p>No associated task yet</p>) : (
-                project.task_ids.map(taskId => (
+              {project.taskIds.length == 0 ? (<p>No associated task yet</p>) : (
+                project.taskIds.map(taskId => (
                   <TaskItem key={taskId} taskId={taskId} />
                 ))
               )}

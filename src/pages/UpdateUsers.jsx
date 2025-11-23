@@ -9,6 +9,7 @@ import { useUpdateUser } from "../hooks/useUpdateUser";
 import { useLocation, useParams } from "react-router-dom";
 import { usePermissions } from "../hooks/usePermissions";
 import { useAuth } from "../hooks/useAuth";
+import { mapUserUpdatesForBackend } from "../config/backendMapper";
 
 function UpdateUser() {
 
@@ -38,7 +39,7 @@ function UpdateUser() {
       setEmail(passedUserData.email);
       setPhone(passedUserData.phone);
       setRole(passedUserData.role);
-      setTaskIds(passedUserData.task_ids);
+      setTaskIds(passedUserData.task_ids || passedUserData.taskIds);
       return;
     }
 
@@ -74,7 +75,7 @@ function UpdateUser() {
         setEmail(data.email);
         setPhone(data.phone);
         setRole(data.role);
-        setTaskIds(data.task_ids);
+        setTaskIds(data.task_ids || data.taskIds);
 
       } catch (err) {
         console.error(err.message);
@@ -85,13 +86,9 @@ function UpdateUser() {
 
   }, [userId, passedUserData]); // on recharge à chaque changement de userId
 
-  const updates = {
-    email: email,
-    phone: phone,
-    role: role,
-    task_ids: taskIds,
-    password
-  };
+  // Mappe le user selon le backend avant de l'envoyer au backend
+  const updatesTmp = {email, phone, role, taskIds, password};
+  const updates = mapUserUpdatesForBackend(updatesTmp);
 
   const updateUser = useUpdateUser();
 
