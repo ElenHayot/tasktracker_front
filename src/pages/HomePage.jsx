@@ -6,8 +6,6 @@ import { DashBoard } from "../components/DashBoard";
 const HomePage = () => {
   const { user, token } = useAuth();
 
-  console.log(`user = ${user}`);
-  console.log(`token = ${token}`);
   // Si pas de token ou pas d'utilisateur, on affiche la page d'authentification
   if (!token || !user) {
     return (

@@ -1,7 +1,6 @@
 // Hook permettant de récupérer les données de l'utilisateur connecté
 import { createContext, useContext, useEffect, useState } from "react";
 import { API_URLS } from "../config/api";
-import { useNavigate } from "react-router-dom";
 
 // On crée "conteneur" vide qui contiendra nos données d'authentification
 const AuthContext = createContext();
@@ -12,7 +11,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);     // Infos de l'utilisateur (null = pas connecté)
   const [loading, setLoading] = useState(false);       // true pendant qu'on vérifie que le user est connecté, false après
   const [token, setToken] = useState(localStorage.getItem('token'));  // Le token JWT stocké dans le navigateur (localStorage)
-  //const navigate = useNavigate();
 
   // Fonction de connexion
   const login = async (email, password, path = '/') => {
@@ -21,25 +19,16 @@ export const AuthProvider = ({ children }) => {
       const urlLogin = API_URLS.getLogin();
       const response = await fetch(urlLogin, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setToken(data.access_token || data.token);
-        localStorage.setItem("token", data.access_token || data.token);
 
-        // Case user info sent in response - else call fetchUserInfo
-        if (data.user) {
-          setUser(data.user);
-        }
-        else { 
-          await fetchUserInfo(data.access_token || data.token); 
-        }
-
-        //navigate(path);
+        await catchTokenAndUser(response);
         return { success: true };
+
       } else {
         const error = await response.json();
         return { success: false, message: error.detail || "Login error" };
@@ -49,6 +38,20 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: "Network error" };
     } finally {
       setLoading(false);
+    }
+  };
+
+  const catchTokenAndUser = async (response) => {
+    const data = await response.json();
+    setToken(data.access_token || data.accessToken);
+    localStorage.setItem("token", data.access_token || data.accessToken);
+
+    // Case user info sent in response - else call fetchUserInfo
+    if (data.user) {
+      setUser(data.user);
+    }
+    else {
+      await fetchUserInfo(data.access_token || data.accessToken);
     }
   };
 
@@ -69,10 +72,29 @@ export const AuthProvider = ({ children }) => {
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
+      }  else if (response.status == '401') {
+
+        try {
+          const urlRefresh = API_URLS.getRefresh();
+          const response = await fetch(urlRefresh, {
+            method: "POST",
+            credentials: "include",
+            headers: {"Content-Type": "application/json"}
+          });
+
+          if (response.ok) {
+            await catchTokenAndUser(response);
+          } else { 
+            // Refresh token invalide, on déconnecte le user
+            logout(); 
+          }
+
+        } catch (error) {
+          return { success: false, message: "Network error" };
+        }
       } else {
-        // Token invalide, on le supprime
-        localStorage.removeItem('token');
-        setToken(null);
+        // Token invalide, on déconnecte le user
+        logout();
       }
     } catch (error) {
       console.error(`Erreur lors de la récupération des infos de l'utilisateur: `, error);
@@ -90,7 +112,6 @@ export const AuthProvider = ({ children }) => {
 
   // useEffect pour déclencher quand le composant se monte ou que 'token' change (connexion/déconnexion)
   useEffect(() => {
-    console.log(`Token = ${token}`);
     if (token && !user) {
       fetchUserInfo(token);
     } else if (!token && !user) {

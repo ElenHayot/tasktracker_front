@@ -3,7 +3,7 @@
 export const API_BACKEND = import.meta.env.VITE_BACKEND_TYPE;
 
 const API_CONFIG = {
-    baseUrl: import.meta.env?.VITE_BACKEND_URL ||
+    baseUrl: API_BACKEND == "dotnet" ? import.meta.env?.VITE_DOTNET_BACKEND_URL : import.meta.env?.VITE_PYTHON_BACKEND_URL ||
             import.meta.env?.VITE_API_URL ||
             window.REACT_APP_API_URL || 
             "http://localhost:8000",
@@ -12,6 +12,7 @@ const API_CONFIG = {
         tasks: "/tasks",
         projects: "/projects",
         login: API_BACKEND == "dotnet" ? "/auth/login" : "/auth/login-json",
+        refresh: "/auth/refresh",
         me: "/auth/me",
         roles: API_BACKEND == "dotnet" ? "/common/roles" : "/roles",
         status: API_BACKEND == "dotnet" ? "/common/status" : "/status",
@@ -109,6 +110,7 @@ export const API_URLS = {
 
     // Authentification
     getLogin: () => buildApiUrl("login"),
+    getRefresh: () => buildApiUrl("refresh"),
     getMe: () => buildApiUrl("me"),
     getRoles: () => buildApiUrl("roles"),
     getStatus: () => buildApiUrl("status"),
