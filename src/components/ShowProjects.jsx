@@ -1,9 +1,12 @@
 // Composant affichant la liste des projets
 import { Link, useNavigate } from "react-router-dom";
 import './Components.css';
+import { usePermissions } from "../hooks/usePermissions";
+import { PERMISSIONS } from "../../permissions.config";
 
 export function ShowProjects({ projects }) {
   const navigate = useNavigate();
+  const { canAccess } = usePermissions();
   // Cas 1 : on passe toute les données du projet à éditer
   const handleEditProjectWithData = (project) => {
     navigate(`/projects/update-project`, {
@@ -22,7 +25,9 @@ export function ShowProjects({ projects }) {
           </span>
           <div className="relative-pt-12">
             <Link to={`/projects/details/${project.id}`} className="link-container">Details</Link>
-            <button onClick={() => handleEditProjectWithData(project)} className="cpnt-update-btn">Edit</button>
+            {canAccess(PERMISSIONS.PROJECTS_UPDATE) &&
+              <button onClick={() => handleEditProjectWithData(project)} className="cpnt-update-btn">Edit</button>
+            }
           </div>
         </li>
       ))}

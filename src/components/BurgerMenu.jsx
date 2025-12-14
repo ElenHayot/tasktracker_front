@@ -11,7 +11,6 @@ export function BurgerMenu() {
   const navigate = useNavigate();
   const { canAccess } = usePermissions();
 
-  //console.log(`canAccess('users-delete') = ${canAccess('users_delete')}`);
   const menuItems = [
     {
       id: `users`,

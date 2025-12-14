@@ -9,6 +9,7 @@ export function usePermissions() {
 
   // ✅ Mise en cache du permissionChecker
   const permissionChecker = useMemo(() => {
+    console.log(`permissionCheckr - user.role = ${user?.role}`);
     if (!user?.role) return null;
 
     const userPermissions = ROLE_PERMISSIONS[user.role];
@@ -28,6 +29,7 @@ export function usePermissions() {
   };
 
   const canAccess = (resource) => {
+    console.log(`canAccess - resource = ${resource}`);
     if (!permissionChecker) {
       console.warn(`No permission checker available. User role: ${user?.role}`);
       return false;

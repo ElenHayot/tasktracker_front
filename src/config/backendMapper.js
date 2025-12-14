@@ -1,6 +1,15 @@
 import { API_BACKEND } from "./api";
 
 // ************************************ //
+// *************** ROLES ************** //
+// ************************************ //
+// Function to normalize roles values received from backend
+export const mapRoles = (role) => {
+    if (!role) return 'Guest';
+    return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+}
+
+// ************************************ //
 // *************** USER *************** //
 // ************************************ //
 

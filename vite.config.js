@@ -76,10 +76,10 @@ export default defineConfig(async ({ command, mode }) => {
     plugins: [react()],
     server: {
       // HTTPS pour le frontend seulement si on a les certificats
-      https: true /*useFrontendHTTPS ? {
+      https: useFrontendHTTPS ? {
         key: fs.readFileSync(keyPath),
         cert: fs.readFileSync(certPath)
-      } : false*/,
+      } : false,
       host: 'localhost',  // ou 127.0.0.1 pour forcer ipv4
       port: 5173,
       proxy: {

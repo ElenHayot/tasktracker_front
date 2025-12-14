@@ -1,9 +1,13 @@
 // Composant affichant la liste des utilisateurs
 import { Link, useNavigate } from "react-router-dom";
 import './Components.css';
+import { usePermissions } from "../hooks/usePermissions";
+import { PERMISSIONS } from "../../permissions.config";
 
 export function ShowUsers({ users }) {
   const navigate = useNavigate();
+  const { canAccess } = usePermissions();
+
   const handleEditUserWithData = (user) => {
     navigate(`/users/update-user`, {
       state: { userData: user }  // on passe toutes les données
@@ -27,11 +31,14 @@ export function ShowUsers({ users }) {
           </span>
           <div className="relative-pt-12">
             <Link to={`/users/details/${user.id}`} className="link-container">Details</Link>
-            {/* Bouton en passant les données complètes (plus efficace) */}
-            <button onClick={() => handleEditUserWithData(user)} className="cpnt-update-btn">Edit</button>
+            {canAccess(PERMISSIONS.USERS_UPDATE) &&
+              /* Bouton en passant les données complètes (plus efficace) */
+              < button onClick={() => handleEditUserWithData(user)} className="cpnt-update-btn">Edit</button>
+            }
           </div>
         </li>
-      ))}
-    </ul>
+      ))
+      }
+    </ul >
   );
 }

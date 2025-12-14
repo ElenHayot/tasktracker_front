@@ -1,6 +1,7 @@
 // Hook permettant de récupérer les données de l'utilisateur connecté
 import { createContext, useContext, useEffect, useState } from "react";
 import { API_URLS } from "../config/api";
+import { mapRoles } from "../config/backendMapper";
 
 // On crée "conteneur" vide qui contiendra nos données d'authentification
 const AuthContext = createContext();
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const urlLogin = API_URLS.getLogin();
+      console.log(`useAuth, urlLogin = ${urlLogin}`);
       const response = await fetch(urlLogin, {
         method: "POST",
         credentials: "include",
@@ -71,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       });
       if (response.ok) {
         const userData = await response.json();
-        setUser(userData);
+        setUser(userData, role = mapRoles(userData.role));
       }  else if (response.status == '401') {
 
         try {
@@ -115,7 +117,8 @@ export const AuthProvider = ({ children }) => {
     if (token && !user) {
       fetchUserInfo(token);
     } else if (!token && !user) {
-      setUser({ id: null, role: 'GUEST', name: 'Doe', firstname: 'John' });
+      console.log(`useAuth - useEffect : !token & !user`);
+      setUser({ id: null, role: 'Guest', name: 'Doe', firstname: 'John' });
     }
   }, [token, user]);
 

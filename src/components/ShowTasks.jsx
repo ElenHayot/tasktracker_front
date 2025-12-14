@@ -1,9 +1,12 @@
 // Composant affichant la liste des tâches
 import { useNavigate, Link } from "react-router-dom";
 import './Components.css';
+import { usePermissions } from "../hooks/usePermissions";
+import { PERMISSIONS } from "../../permissions.config";
 
 export function ShowTask({ tasks }) {
   const navigate = useNavigate();
+  const { canAccess } = usePermissions();
   const handleEditTaskWithData = (task) => {
     navigate(`/tasks/update-task`, {
       state: { taskData: task }
@@ -22,7 +25,9 @@ export function ShowTask({ tasks }) {
           </span>
           <div className="relative-pt-12">
             <Link to={`/tasks/details/${task.id}`} className="link-container">Details</Link>
-            <button onClick={() => handleEditTaskWithData(task)} className="cpnt-update-btn">Edit</button>
+            {canAccess(PERMISSIONS.TASKS_UPDATE) &&
+              <button onClick={() => handleEditTaskWithData(task)} className="cpnt-update-btn">Edit</button>
+            }
           </div>
         </li>
       ))}
